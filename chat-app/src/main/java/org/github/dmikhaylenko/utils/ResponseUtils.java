@@ -5,6 +5,7 @@ import java.util.List;
 import org.github.dmikhaylenko.errors.ApplicationException;
 import org.github.dmikhaylenko.model.ChangePasswordResponse;
 import org.github.dmikhaylenko.model.LogoutResponse;
+import org.github.dmikhaylenko.model.LoginResponse;
 import org.github.dmikhaylenko.model.RegisterUserResponse;
 import org.github.dmikhaylenko.model.ResponseModel;
 import org.github.dmikhaylenko.model.SearchUsersResponse;
@@ -14,6 +15,13 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ResponseUtils {
+	public LoginResponse createLoginResponse(String token) {
+		LoginResponse result = new LoginResponse();
+		initSuccessfulResponseModel(result);
+		result.setToken(token);
+		return result;
+	}
+
 	public RegisterUserResponse createRegisterUserResponse(Long id) {
 		RegisterUserResponse result = new RegisterUserResponse();
 		initSuccessfulResponseModel(result);
@@ -41,7 +49,7 @@ public class ResponseUtils {
 		result.setUserId(id);
 		return result;
 	}
-
+	
 	public ResponseModel createNonApplicationErrorResponse() {
 		return createErrorResponse(-1L);
 	}

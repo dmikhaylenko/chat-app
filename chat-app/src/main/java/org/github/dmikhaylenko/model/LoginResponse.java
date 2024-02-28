@@ -4,28 +4,19 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @XmlRootElement
 @NoArgsConstructor
-@XmlType(name = "Response")
+@XmlType(name = "LoginResponse")
+@EqualsAndHashCode(callSuper = true)
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlSeeAlso({
-	RegisterUserResponse.class,
-	SearchUsersResponse.class,
-	LogoutResponse.class,
-	ChangePasswordResponse.class,
-	LoginResponse.class
-})
-public class ResponseModel {
+public class LoginResponse extends ResponseModel {
 	@XmlElement
-	private Long responseCode;
-	
-	@XmlElement
-	private String responseMessage;
+	private String token;
 }

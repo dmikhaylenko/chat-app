@@ -64,7 +64,7 @@ public class DatabaseUtils {
 	public <T> List<T> parseResultSet(ResultSet resultSet, RsRowParser<T> parser) throws SQLException {
 		List<T> result = new LinkedList<>();
 		while (resultSet.next()) {
-			result.add(parser.parseRow(resultSet));
+			Optional.ofNullable(parser.parseRow(resultSet)).ifPresent(result::add);
 		}
 		return result;
 	}

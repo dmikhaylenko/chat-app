@@ -6,8 +6,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
 import org.github.dmikhaylenko.model.AuthTokenModel;
+import org.github.dmikhaylenko.model.LoginModel;
 import org.github.dmikhaylenko.model.ResponseModel;
 import org.github.dmikhaylenko.utils.AuthUtils;
+import org.github.dmikhaylenko.utils.ExceptionUtils;
 import org.github.dmikhaylenko.utils.ResponseUtils;
 
 @Path("/auth")
@@ -19,5 +21,11 @@ public class LoginController {
 		AuthUtils.checkAuthenticated(token);
 		token.logout();
 		return ResponseUtils.createLogoutResponse();
+	}
+
+	@Path("/login")
+	public ResponseModel login(LoginModel model) {
+		String token = model.executeLogin().orElseThrow(ExceptionUtils::createWrongLoginOrPasswordException);
+		return ResponseUtils.createLoginResponse(token);
 	}
 }

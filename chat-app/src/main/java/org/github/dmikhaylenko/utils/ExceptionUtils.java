@@ -45,6 +45,10 @@ public class ExceptionUtils {
 		return exception;
 	}
 
+	public ApplicationException createWrongLoginOrPasswordException() {
+		return createApplicationException(4L);
+	}
+	
 	private ApplicationException createApplicationException(Long code) {
 		ApplicationException exception = new ApplicationException();
 		exception.setCode(code);
