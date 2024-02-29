@@ -1,0 +1,153 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+    
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    display: block;
+    margin: 0 0 8px 0;
+  }
+
+  /* Clearfix */
+.clearfix {
+    overflow: auto;
+  }
+  
+  .clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+  
+  /* Vertical align */
+  .vertical-align::before {
+    content: "";
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  .vertical-align .vertical-align__center {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+/* Button */
+.btn {
+    font-weight: 600;
+    padding: 8px 24px;
+    border-radius: 3px;
+    display: inline-block;
+    font-family: "Open Sans";
+  }
+
+  .btn.btn_icon {
+    padding: 8px;
+    background-color: transparent;
+  }
+  
+  .btn.btn_primary {
+    color: #ffffff;
+    background-color: #445f5e;
+  }
+
+  .btn.btn_icon.btn_white {
+    color: #ffffff;
+  }
+  
+  .btn,
+  .btn:focus,
+  .btn:hover,
+  .btn:active {
+    border: none;
+    outline: none;
+  }
+  
+  .btn:hover,
+  .btn:active {
+    cursor: pointer;
+  }
+  
+  .btn:active {
+    opacity: .85;
+  }
+  
+  .btn.btn.btn_primary:hover,
+  .btn.btn.btn_primary:active {
+    background-color: #445f5ef0;
+  }
+
+/* Link */
+.link,
+.link:hover,
+.link:active,
+.link:visited,
+.link:focus {
+  outline: none;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  font-family: "Open Sans";
+}
+
+.link:active {
+  opacity: .8;
+}
+
+.link.link_secondary {
+  color: #9f9f9f;
+}
+
+.link.link_secondary:hover,
+.link.link_secondary:active {
+  color: #445f5ef0;
+}
+
+.link.link_white {
+  color: #ffffff;
+}
+
+.link.link.link_white:hover {
+  opacity: .85;
+}
+
+.link.link_white:active {
+  opacity: .8;
+}
+
+/* Avatar */
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .avatar .avatar__image {
+    top: 0;
+    left: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 40px;
+    height: auto;
+    display: block;
+    position: absolute;
+    
+  }
+
+  .header {
+    display: block;
+    color: #ffffff;
+  }
