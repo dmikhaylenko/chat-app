@@ -2,6 +2,7 @@ package org.github.dmikhaylenko.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
@@ -15,6 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RsRowParser;
+import org.github.dmikhaylenko.utils.PageUtils;
 import org.github.dmikhaylenko.utils.Resources;
 
 import lombok.Data;
@@ -54,6 +56,50 @@ public class UserModel {
 				(connection, statement) -> {
 					statement.setLong(1, id);
 					return DatabaseUtils.parseResultSetSingleRow(statement.executeQuery(), new UserModelRowParser());
+				});
+	}
+
+	// @formatter:off
+	private static final String FIND_BY_PHONE_OR_USERNAME_QUERY = 
+			"SELECT \r\n"
+			+ "    ID, AVATAR_HREF, PHONE, USERNAME, NULL AS PASSWORD \r\n" 
+			+ "FROM\r\n" + "    USER\r\n" + "WHERE\r\n"
+			+ "    LOWER(PHONE) LIKE CONCAT('%', LOWER(TRIM(COALESCE(?, ''))),'%') OR\r\n"
+			+ "    LOWER(USERNAME) LIKE CONCAT('%', LOWER(TRIM(COALESCE(?, ''))),'%')\r\n" 
+			+ "LIMIT ?\r\n" 
+			+ "OFFSET ?";
+	// @formatter:on
+
+	public static List<UserModel> findByPhoneOrUsername(String sstr, Long pg, Long ps) {
+		Long offset = PageUtils.calculateOffset(pg, ps);
+		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), FIND_BY_PHONE_OR_USERNAME_QUERY,
+				(connection, statement) -> {
+					statement.setString(1, sstr);
+					statement.setString(2, sstr);
+					statement.setLong(3, ps);
+					statement.setLong(4, offset);
+					return DatabaseUtils.parseResultSet(statement.executeQuery(), new UserModelRowParser());
+				});
+	}
+
+	// @formatter:off
+	private static final String COUNT_BY_PHONE_OR_USERNAME_QUERY = 
+			"SELECT \r\n" 
+	        + "    COUNT(*) AS TOTAL\r\n"
+			+ "FROM\r\n" 
+	        + "    USER\r\n" 
+			+ "WHERE\r\n"
+			+ "    LOWER(PHONE) LIKE CONCAT('%', LOWER(TRIM(COALESCE(?, ''))), '%') OR\r\n"
+			+ "    LOWER(USERNAME) LIKE CONCAT('%', LOWER(TRIM(COALESCE(?, ''))), '%')";
+	// @formatter:on
+
+	public static Long countByPhoneOrUsername(String sstr) {
+		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), COUNT_BY_PHONE_OR_USERNAME_QUERY,
+				(connection, statement) -> {
+					statement.setString(1, sstr);
+					statement.setString(2, sstr);
+					return DatabaseUtils
+							.parseResultSetSingleRow(statement.executeQuery(), RowParsers.longValueRowMapper()).get();
 				});
 	}
 

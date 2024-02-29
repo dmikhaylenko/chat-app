@@ -1,8 +1,12 @@
 package org.github.dmikhaylenko.utils;
 
+import java.util.List;
+
 import org.github.dmikhaylenko.errors.ApplicationException;
 import org.github.dmikhaylenko.model.RegisterUserResponse;
 import org.github.dmikhaylenko.model.ResponseModel;
+import org.github.dmikhaylenko.model.SearchUsersResponse;
+import org.github.dmikhaylenko.model.UserModel;
 
 import lombok.experimental.UtilityClass;
 
@@ -12,6 +16,14 @@ public class ResponseUtils {
 		RegisterUserResponse result = new RegisterUserResponse();
 		initSuccessfulResponseModel(result);
 		result.setId(id);
+		return result;
+	}
+	
+	public SearchUsersResponse createSearchUsersResponse(List<UserModel> users, Long total) {
+		SearchUsersResponse result = new SearchUsersResponse();
+		initSuccessfulResponseModel(result);
+		result.setUsers(users);
+		result.setTotal(total);
 		return result;
 	}
 	
