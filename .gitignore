@@ -32,3 +32,6 @@ target/
 .project
 .factorypath
 dependency-reduced-pom.xml
+
+# node js
+node_modules/
