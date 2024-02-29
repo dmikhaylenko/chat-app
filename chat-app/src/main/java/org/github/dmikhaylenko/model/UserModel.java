@@ -143,6 +143,22 @@ public class UserModel {
 					return this;
 				});
 	}
+	
+	private static final String UPDATE_INTO_USER_TABLE_QUERY = "UPDATE USER SET PHONE=?,PASSWORD=?, USERNAME=?, AVATAR_HREF=? WHERE ID=?";
+	
+	public UserModel updateIntoUserTable() {
+		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), UPDATE_INTO_USER_TABLE_QUERY, (connection, statement) -> {
+			connection.setAutoCommit(false);
+			statement.setString(1, getPhone());
+			statement.setString(2, getPassword());
+			statement.setString(3, getPublicName());
+			statement.setString(4, getAvatar());
+			statement.setLong(5, getId());
+			statement.executeUpdate();
+			connection.commit();
+			return this;
+		});
+	}
 
 	private static class UserModelRowParser implements RsRowParser<UserModel> {
 		@Override

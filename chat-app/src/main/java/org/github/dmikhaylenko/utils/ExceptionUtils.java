@@ -34,6 +34,17 @@ public class ExceptionUtils {
 		return exception;
 	}
 	
+	public ApplicationException createWrongLoginAndPasswordException() {
+		return createApplicationException(4L);
+	}
+
+	public ApplicationException createUserNotAuthenticatedException(String... challenges) {
+		AuthenticationException exception = new AuthenticationException();
+		exception.setCode(5L);
+		exception.setChallenges(Arrays.asList(challenges));
+		return exception;
+	}
+
 	private ApplicationException createApplicationException(Long code) {
 		ApplicationException exception = new ApplicationException();
 		exception.setCode(code);

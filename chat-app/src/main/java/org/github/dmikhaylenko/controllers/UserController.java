@@ -1,6 +1,7 @@
 package org.github.dmikhaylenko.controllers;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -9,6 +10,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
+import org.github.dmikhaylenko.model.AuthTokenModel;
+import org.github.dmikhaylenko.model.ChangePasswordModel;
 import org.github.dmikhaylenko.model.ResponseModel;
 import org.github.dmikhaylenko.model.UserModel;
 import org.github.dmikhaylenko.utils.AuthUtils;
@@ -43,5 +46,21 @@ public class UserController {
 		List<UserModel> users = UserModel.findByPhoneOrUsername(sstr, normalizedPg, normalizedPs);
 		Long total = UserModel.countByPhoneOrUsername(sstr);
 		return ResponseUtils.createSearchUsersResponse(users, total);
+	}
+	
+	@POST
+	@Path("/current/password")
+	public ResponseModel changePassword(@Context HttpHeaders headers, ChangePasswordModel model) {
+		ValidationUtils.checkConstraints(model);
+		AuthTokenModel token = AuthUtils.getTokenFromHeaders(headers);
+		AuthUtils.checkThatAuthenticated(token);
+
+		Long userId = model.findUserByCredentials().filter(value -> Objects.equals(value, token.getAuthenticatedUser()))
+				.orElseThrow(ExceptionUtils::createWrongLoginAndPasswordException);
+
+		UserModel userModel = UserModel.findById(userId).get();
+		userModel.setPassword(model.getNewPassword());
+
+		return ResponseUtils.createChangePasswordResponse(userModel.updateIntoUserTable().getId());
 	}
 }

@@ -3,6 +3,7 @@ package org.github.dmikhaylenko.utils;
 import java.util.List;
 
 import org.github.dmikhaylenko.errors.ApplicationException;
+import org.github.dmikhaylenko.model.ChangePasswordResponse;
 import org.github.dmikhaylenko.model.LogoutResponse;
 import org.github.dmikhaylenko.model.RegisterUserResponse;
 import org.github.dmikhaylenko.model.ResponseModel;
@@ -19,7 +20,6 @@ public class ResponseUtils {
 		result.setId(id);
 		return result;
 	}
-	
 
 	public SearchUsersResponse createSearchUsersResponse(List<UserModel> users, Long total) {
 		SearchUsersResponse result = new SearchUsersResponse();
@@ -35,6 +35,13 @@ public class ResponseUtils {
 		return result;
 	}
 	
+	public ChangePasswordResponse createChangePasswordResponse(Long id) {
+		ChangePasswordResponse result = new ChangePasswordResponse();
+		initSuccessfulResponseModel(result);
+		result.setUserId(id);
+		return result;
+	}
+
 	public ResponseModel createNonApplicationErrorResponse() {
 		return createErrorResponse(-1L);
 	}
@@ -48,11 +55,11 @@ public class ResponseUtils {
 		initResponseModel(result, code);
 		return result;
 	}
-	
+
 	private void initSuccessfulResponseModel(ResponseModel responseModel) {
 		initResponseModel(responseModel, 0L);
 	}
-	
+
 	private void initResponseModel(ResponseModel responseModel, Long code) {
 		responseModel.setResponseCode(code);
 		MessageUtils.getErrorMessage(code).ifPresent(responseModel::setResponseMessage);

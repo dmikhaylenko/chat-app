@@ -11,5 +11,4 @@ public class AuthenticationException extends ApplicationException {
 	private static final long serialVersionUID = -5342920432048575665L;
 	private List<String> challenge;
 	private List<String> challenges;
-
 }

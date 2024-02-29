@@ -12,9 +12,9 @@ import org.github.dmikhaylenko.utils.ResponseUtils;
 @Provider
 public class AuthenticationExceptionMapper implements ExceptionMapper<AuthenticationException> {
 	@Override
-	public Response toResponse(AuthenticationException exception) {
-		String challengesHeader = String.join(",", exception.getChallenges());
+	public Response toResponse(AuthenticationException exception) {		
 		ResponseModel responseEntity = ResponseUtils.createErrorResponse(exception);
+		String challengesHeader = String.join(", ", exception.getChallenges());
 		return Response.status(Status.UNAUTHORIZED).header(HttpHeaders.WWW_AUTHENTICATE, challengesHeader)
 				.entity(responseEntity).build();
 	}

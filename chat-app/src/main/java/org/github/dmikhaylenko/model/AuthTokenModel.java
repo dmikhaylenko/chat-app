@@ -1,9 +1,5 @@
 package org.github.dmikhaylenko.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.utils.Resources;
@@ -11,8 +7,6 @@ import org.github.dmikhaylenko.utils.Resources;
 import lombok.Data;
 
 @Data
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 public class AuthTokenModel {
 	private String token;
 
@@ -38,6 +32,17 @@ public class AuthTokenModel {
 					statement.execute();
 					connection.commit();
 					return null;
+				});
+	}
+
+	private static final String GET_AUTHENTICATED_USER_QUERY = "SELECT USER_ID FROM AUTH WHERE TOKEN = ?";
+
+	public Long getAuthenticatedUser() {
+		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), GET_AUTHENTICATED_USER_QUERY,
+				(connection, statement) -> {
+					statement.setString(1, getToken());
+					return DatabaseUtils
+							.parseResultSetSingleRow(statement.executeQuery(), RowParsers.longValueRowMapper()).get();
 				});
 	}
 }
