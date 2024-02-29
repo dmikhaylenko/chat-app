@@ -3,6 +3,7 @@ package org.github.dmikhaylenko.utils;
 import java.util.List;
 
 import org.github.dmikhaylenko.errors.ApplicationException;
+import org.github.dmikhaylenko.model.LogoutResponse;
 import org.github.dmikhaylenko.model.RegisterUserResponse;
 import org.github.dmikhaylenko.model.ResponseModel;
 import org.github.dmikhaylenko.model.SearchUsersResponse;
@@ -19,11 +20,18 @@ public class ResponseUtils {
 		return result;
 	}
 	
+
 	public SearchUsersResponse createSearchUsersResponse(List<UserModel> users, Long total) {
 		SearchUsersResponse result = new SearchUsersResponse();
 		initSuccessfulResponseModel(result);
 		result.setUsers(users);
 		result.setTotal(total);
+		return result;
+	}
+
+	public LogoutResponse createLogoutResponse() {
+		LogoutResponse result = new LogoutResponse();
+		initSuccessfulResponseModel(result);
 		return result;
 	}
 	
