@@ -1,7 +1,9 @@
 package org.github.dmikhaylenko.controllers;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
@@ -24,9 +26,23 @@ public class ContactController {
 		AuthUtils.checkAuthenticated(authToken);
 		contact.setUserId(authToken.getAuthenticatedUser());
 		checkThatRequestedUserExits(contact);
-		checkThatContactExistsIntoTable(contact);
+		checkThatContactDoesNotExistIntoTable(contact);
 		contact.insertIntoContactTable();
 		return ResponseUtils.createAddContactResponse();
+	}
+	
+	@DELETE
+	@Path("/{contactId}")
+	public ResponseModel deleteContact(@Context HttpHeaders headers, @PathParam("contactId") Long contactId) {
+		AuthTokenModel authToken = AuthUtils.parseAuthToken(headers);
+		AuthUtils.checkAuthenticated(authToken);
+		ContactModel contact = new ContactModel();
+		contact.setUserId(authToken.getAuthenticatedUser());
+		contact.setContactId(contactId);
+		checkThatContactExistsIntoTable(contact);
+		contact.deleteFromContactTable();
+		return ResponseUtils.createDeleteContactResponse();
+		
 	}
 
 	private void checkThatRequestedUserExits(ContactModel contact) {
@@ -35,9 +51,15 @@ public class ContactController {
 		}
 	}
 
-	private void checkThatContactExistsIntoTable(ContactModel contact) {
+	private void checkThatContactDoesNotExistIntoTable(ContactModel contact) {
 		if (contact.existsIntoContactTable()) {
 			throw ExceptionUtils.createContactAlreadyExistsException();
+		}
+	}
+	
+	private void checkThatContactExistsIntoTable(ContactModel contact) {
+		if (!contact.existsIntoContactTable()) {
+			throw ExceptionUtils.createMissingRequestedContactException();
 		}
 	}
 }

@@ -49,4 +49,16 @@ public class ContactModel {
 					return null;
 				});
 	}
+
+	private static String DELETE_FROM_TABLE_QUERY = "DELETE FROM CONTACT WHERE WHOSE_ID = ? AND WHO_ID = ?";
+
+	public void deleteFromContactTable() {
+		DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), DELETE_FROM_TABLE_QUERY,
+				(connection, statement) -> {
+					statement.setLong(1, userId);
+					statement.setLong(2, contactId);
+					statement.executeUpdate();
+					return null;
+				});
+	}
 }

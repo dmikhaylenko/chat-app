@@ -45,6 +45,10 @@ public class ExceptionUtils {
 	public ApplicationException createContactAlreadyExistsException() {
 		return createApplicationException(7L);
 	}
+	
+	public ApplicationException createMissingRequestedContactException() {
+		return createApplicationException(8L);
+	}
 
 	public ApplicationException createUserNotAuthenticatedException(String... challenges) {
 		AuthenticationException exception = new AuthenticationException();
