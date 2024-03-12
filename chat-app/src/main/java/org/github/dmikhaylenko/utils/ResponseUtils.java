@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.github.dmikhaylenko.errors.ApplicationException;
 import org.github.dmikhaylenko.model.ChangePasswordResponse;
+import org.github.dmikhaylenko.model.HistoryModel;
 import org.github.dmikhaylenko.model.LogoutResponse;
 import org.github.dmikhaylenko.model.LoginResponse;
 import org.github.dmikhaylenko.model.RegisterUserResponse;
 import org.github.dmikhaylenko.model.ResponseModel;
+import org.github.dmikhaylenko.model.SearchHistoriesResponse;
 import org.github.dmikhaylenko.model.SearchUsersResponse;
 import org.github.dmikhaylenko.model.UserModel;
 
@@ -47,6 +49,15 @@ public class ResponseUtils {
 		ChangePasswordResponse result = new ChangePasswordResponse();
 		initSuccessfulResponseModel(result);
 		result.setUserId(id);
+		return result;
+	}
+	
+	public SearchHistoriesResponse createSearchHistoriesResponse(List<HistoryModel> histories, Long total, Long unwatched) {
+		SearchHistoriesResponse result = new SearchHistoriesResponse();
+		initSuccessfulResponseModel(result);
+		result.setHistories(histories);
+		result.setUnwatched(unwatched);
+		result.setTotal(total);
 		return result;
 	}
 	

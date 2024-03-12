@@ -23,6 +23,7 @@ public class LoginController {
 		return ResponseUtils.createLogoutResponse();
 	}
 
+	@POST
 	@Path("/login")
 	public ResponseModel login(LoginModel model) {
 		String token = model.executeLogin().orElseThrow(ExceptionUtils::createWrongLoginOrPasswordException);

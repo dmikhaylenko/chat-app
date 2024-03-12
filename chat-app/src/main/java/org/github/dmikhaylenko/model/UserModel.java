@@ -2,22 +2,27 @@ package org.github.dmikhaylenko.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.github.dmikhaylenko.adapters.JaxbLocalDateTimeAdapter;
 import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RsRowParser;
 import org.github.dmikhaylenko.utils.PageUtils;
 import org.github.dmikhaylenko.utils.Resources;
+import org.github.dmikhaylenko.utils.TimeUtils;
 
 import lombok.Data;
 
@@ -49,6 +54,11 @@ public class UserModel {
 	@Size(min = 1, max = 50)
 	private String publicName;
 
+	@Null
+	@XmlElement
+	@XmlJavaTypeAdapter(value = JaxbLocalDateTimeAdapter.class)
+	private LocalDateTime lastAuth;
+
 	private static final String FIND_BY_ID_QUERY = "SELECT * FROM USER WHERE ID = ?";
 
 	public static Optional<UserModel> findById(Long id) {
@@ -62,8 +72,10 @@ public class UserModel {
 	// @formatter:off
 	private static final String FIND_BY_PHONE_OR_USERNAME_QUERY = 
 			"SELECT \r\n"
-			+ "    ID, AVATAR_HREF, PHONE, USERNAME, NULL AS PASSWORD \r\n" 
-			+ "FROM\r\n" + "    USER\r\n" + "WHERE\r\n"
+			+ "    ID, AVATAR_HREF, PHONE, USERNAME, NULL AS PASSWORD, NULL AS LAST_AUTH \r\n" 
+			+ "FROM\r\n" 
+			+ "    USER\r\n" 
+			+ "WHERE\r\n"
 			+ "    LOWER(PHONE) LIKE CONCAT('%', LOWER(TRIM(COALESCE(?, ''))),'%') OR\r\n"
 			+ "    LOWER(USERNAME) LIKE CONCAT('%', LOWER(TRIM(COALESCE(?, ''))),'%')\r\n" 
 			+ "LIMIT ?\r\n" 
@@ -143,21 +155,22 @@ public class UserModel {
 					return this;
 				});
 	}
-	
+
 	private static final String UPDATE_INTO_USER_TABLE_QUERY = "UPDATE USER SET PHONE=?,PASSWORD=?, USERNAME=?, AVATAR_HREF=? WHERE ID=?";
-	
+
 	public UserModel updateIntoUserTable() {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), UPDATE_INTO_USER_TABLE_QUERY, (connection, statement) -> {
-			connection.setAutoCommit(false);
-			statement.setString(1, getPhone());
-			statement.setString(2, getPassword());
-			statement.setString(3, getPublicName());
-			statement.setString(4, getAvatar());
-			statement.setLong(5, getId());
-			statement.executeUpdate();
-			connection.commit();
-			return this;
-		});
+		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), UPDATE_INTO_USER_TABLE_QUERY,
+				(connection, statement) -> {
+					connection.setAutoCommit(false);
+					statement.setString(1, getPhone());
+					statement.setString(2, getPassword());
+					statement.setString(3, getPublicName());
+					statement.setString(4, getAvatar());
+					statement.setLong(5, getId());
+					statement.executeUpdate();
+					connection.commit();
+					return this;
+				});
 	}
 
 	private static class UserModelRowParser implements RsRowParser<UserModel> {
@@ -169,6 +182,7 @@ public class UserModel {
 			model.setPhone(resultSet.getString("PHONE"));
 			model.setPassword(resultSet.getString("PASSWORD"));
 			model.setPublicName(resultSet.getString("USERNAME"));
+			model.setLastAuth(TimeUtils.createLocalDateTime(resultSet.getTimestamp("LAST_AUTH")));
 			return model;
 		}
 	}
