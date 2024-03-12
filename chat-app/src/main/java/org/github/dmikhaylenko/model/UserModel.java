@@ -53,11 +53,23 @@ public class UserModel {
 	@XmlElement
 	@Size(min = 1, max = 50)
 	private String publicName;
-
+	
 	@Null
 	@XmlElement
 	@XmlJavaTypeAdapter(value = JaxbLocalDateTimeAdapter.class)
 	private LocalDateTime lastAuth;
+
+	private static final String CHECK_EXISTS_BY_ID_QUERY = "SELECT COUNT(*) > 0 FROM USER WHERE ID = ?";
+
+	public static boolean existsById(Long id) {
+		return DatabaseUtils.executeWithCallStatement(Resources.getChatDb(), CHECK_EXISTS_BY_ID_QUERY,
+				(connection, statement) -> {
+					statement.setLong(1, id);
+					return DatabaseUtils
+							.parseResultSetSingleRow(statement.executeQuery(), RowParsers.booleanValueRowMapper())
+							.get();
+				});
+	}
 
 	private static final String FIND_BY_ID_QUERY = "SELECT * FROM USER WHERE ID = ?";
 

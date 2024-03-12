@@ -37,6 +37,14 @@ public class ExceptionUtils {
 	public ApplicationException createWrongLoginAndPasswordException() {
 		return createApplicationException(4L);
 	}
+	
+	public ApplicationException createMissingRequestedUserException() {
+		return createApplicationException(6L);
+	}
+	
+	public ApplicationException createContactAlreadyExistsException() {
+		return createApplicationException(7L);
+	}
 
 	public ApplicationException createUserNotAuthenticatedException(String... challenges) {
 		AuthenticationException exception = new AuthenticationException();

@@ -3,6 +3,7 @@ package org.github.dmikhaylenko.utils;
 import java.util.List;
 
 import org.github.dmikhaylenko.errors.ApplicationException;
+import org.github.dmikhaylenko.model.AddContactResponse;
 import org.github.dmikhaylenko.model.ChangePasswordResponse;
 import org.github.dmikhaylenko.model.HistoryModel;
 import org.github.dmikhaylenko.model.LogoutResponse;
@@ -58,6 +59,12 @@ public class ResponseUtils {
 		result.setHistories(histories);
 		result.setUnwatched(unwatched);
 		result.setTotal(total);
+		return result;
+    }
+
+	public AddContactResponse createAddContactResponse() {
+		AddContactResponse result = new AddContactResponse();
+		initSuccessfulResponseModel(result);
 		return result;
 	}
 	

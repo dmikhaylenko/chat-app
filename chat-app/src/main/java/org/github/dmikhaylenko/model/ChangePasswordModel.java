@@ -4,7 +4,10 @@ import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RowParsers;
@@ -13,6 +16,8 @@ import org.github.dmikhaylenko.utils.Resources;
 import lombok.Data;
 
 @Data
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ChangePasswordModel {
 	@XmlElement
 	private String username;

@@ -10,7 +10,7 @@ import javax.ws.rs.core.HttpHeaders;
 
 import org.github.dmikhaylenko.model.AuthTokenModel;
 import org.github.dmikhaylenko.model.HistoryModel;
-import org.github.dmikhaylenko.model.SearchHistoriesResponse;
+import org.github.dmikhaylenko.model.ResponseModel;
 import org.github.dmikhaylenko.utils.AuthUtils;
 import org.github.dmikhaylenko.utils.PageUtils;
 import org.github.dmikhaylenko.utils.ResponseUtils;
@@ -19,7 +19,8 @@ import org.github.dmikhaylenko.utils.TimezoneUtils;
 @Path("/histories")
 public class HistoriesController {
 	@GET
-	public SearchHistoriesResponse searchHistories(@Context HttpHeaders headers, @QueryParam("pg") Long pg, @QueryParam("ps") Long ps) {
+	public ResponseModel searchHistories(@Context HttpHeaders headers, @QueryParam("pg") Long pg,
+			@QueryParam("ps") Long ps) {
 		TimezoneUtils.loadZoneOffset(headers);
 		AuthTokenModel token = AuthUtils.parseAuthToken(headers);
 		AuthUtils.checkThatAuthenticated(token);

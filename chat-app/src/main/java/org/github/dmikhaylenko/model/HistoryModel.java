@@ -90,16 +90,18 @@ public class HistoryModel {
 	}
 
 	// @formatter:off
-	private static final String COUNT_UNWATCHED_HISTORIES_QUERY = "SELECT \r\n"
-			+ "    SUM(UW.UNWATCHED) AS TOTAL_UNWATCHED\r\n"
-			+ "FROM \r\n"
-			+ "    VW_UNWATCHED_MESSAGES UW\r\n"
+	private static final String COUNT_UNWATCHED_HISTORIES_QUERY = "SELECT\r\n"
+			+ "    SUM(COALESCE(UW.UNWATCHED, 0)) \r\n"
+			+ "FROM\r\n"
+			+ "    USER U\r\n"
+			+ "    LEFT JOIN VW_UNWATCHED_MESSAGES UW\r\n"
+			+ "        ON U.ID = UW.USER_ID\r\n"
 			+ "    LEFT JOIN AUTH A\r\n"
-			+ "        ON A.USER_ID = UW.USER_ID\r\n"
+			+ "        ON U.ID = A.USER_ID\r\n"
 			+ "WHERE\r\n"
 			+ "    A.TOKEN = ?\r\n"
 			+ "GROUP BY\r\n"
-			+ "    UW.USER_ID";
+			+ "    U.ID";
 	// @formatter:on
 
 	public static Long countUnwatchedHistories(AuthTokenModel token) {
