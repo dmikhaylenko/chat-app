@@ -5,6 +5,7 @@ import java.util.List;
 import org.github.dmikhaylenko.errors.ApplicationException;
 import org.github.dmikhaylenko.model.AddContactResponse;
 import org.github.dmikhaylenko.model.ChangePasswordResponse;
+import org.github.dmikhaylenko.model.ClearHistoryResponse;
 import org.github.dmikhaylenko.model.DeleteContactResponse;
 import org.github.dmikhaylenko.model.HistoryModel;
 import org.github.dmikhaylenko.model.LogoutResponse;
@@ -71,6 +72,12 @@ public class ResponseUtils {
 	
 	public DeleteContactResponse createDeleteContactResponse() {
 		DeleteContactResponse result = new DeleteContactResponse();
+		initSuccessfulResponseModel(result);
+		return result;
+	}
+	
+	public ClearHistoryResponse createClearHistoryResponse() {
+		ClearHistoryResponse result = new ClearHistoryResponse();
 		initSuccessfulResponseModel(result);
 		return result;
 	}

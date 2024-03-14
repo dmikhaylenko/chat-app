@@ -2,8 +2,10 @@ package org.github.dmikhaylenko.controllers;
 
 import java.util.List;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -15,6 +17,7 @@ import org.github.dmikhaylenko.utils.AuthUtils;
 import org.github.dmikhaylenko.utils.PageUtils;
 import org.github.dmikhaylenko.utils.ResponseUtils;
 import org.github.dmikhaylenko.utils.TimezoneUtils;
+import org.github.dmikhaylenko.utils.UserUtils;
 
 @Path("/histories")
 public class HistoriesController {
@@ -30,5 +33,15 @@ public class HistoriesController {
 		Long total = HistoryModel.countHistories(token);
 		Long totalUnwatched = HistoryModel.countUnwatchedHistories(token);
 		return ResponseUtils.createSearchHistoriesResponse(histories, total, totalUnwatched);
+	}
+
+	@DELETE
+	@Path("/{userId}")
+	public ResponseModel clearHistory(@Context HttpHeaders headers, @PathParam("userId") Long userId) {
+		AuthTokenModel token = AuthUtils.parseAuthToken(headers);
+		AuthUtils.checkAuthenticated(token);
+		UserUtils.checkThatRequestedUserExits(userId);
+		HistoryModel.clearAllMessages(token.getAuthenticatedUser(), userId);
+		return ResponseUtils.createClearHistoryResponse();
 	}
 }

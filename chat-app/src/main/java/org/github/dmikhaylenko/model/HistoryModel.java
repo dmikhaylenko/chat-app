@@ -40,10 +40,10 @@ public class HistoryModel {
 	@XmlElement
 	@XmlJavaTypeAdapter(value = JaxbLocalDateTimeAdapter.class)
 	private LocalDateTime lastAccess;
-	
+
 	@XmlElement
 	private Long unwatched;
-	
+
 	// @formatter:off
 	private static final String FIND_HISTORIES_QUERY = "SELECT \r\n"
 			+ "    OPPONENT_ID AS ID,\r\n"
@@ -110,6 +110,26 @@ public class HistoryModel {
 					statement.setString(1, token.getToken());
 					return DatabaseUtils
 							.parseResultSetSingleRow(statement.executeQuery(), RowParsers.longValueRowMapper()).get();
+				});
+	}
+
+	// @formatter:off
+	private static final String CLEAR_ALL_MESSAGES_QUERY = "DELETE FROM \r\n"
+			+ "    MESSAGE \r\n"
+			+ "WHERE\r\n"
+			+ "    (SRC_ID = ? AND DEST_ID = ?) OR\r\n"
+			+ "    (SRC_ID = ? AND DEST_ID = ?)";
+	// @formatter:on
+	
+	public static void clearAllMessages(Long currentUserId, Long userId) {
+		DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), CLEAR_ALL_MESSAGES_QUERY,
+				(connection, statement) -> {
+					statement.setLong(1, currentUserId);
+					statement.setLong(2, userId);
+					statement.setLong(3, userId);
+					statement.setLong(4, currentUserId);
+					statement.executeUpdate();
+					return null;
 				});
 	}
 
