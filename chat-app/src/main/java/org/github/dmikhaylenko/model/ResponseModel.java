@@ -24,7 +24,8 @@ import lombok.NoArgsConstructor;
 	SearchHistoriesResponse.class,
 	AddContactResponse.class,
 	DeleteContactResponse.class,
-	ClearHistoryResponse.class
+	ClearHistoryResponse.class,
+	PostMessageResponse.class
 })
 public class ResponseModel {
 	@XmlElement

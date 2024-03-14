@@ -153,7 +153,7 @@ public class UserModel {
 
 	private static final String INSERT_TO_USER_TABLE_QUERY = "INSERT INTO USER(PHONE, PASSWORD, USERNAME, AVATAR_HREF) VALUES(?,?,?,?)";
 
-	public UserModel insertToUserTable() {
+	public Long insertToUserTable() {
 		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), INSERT_TO_USER_TABLE_QUERY,
 				(connection, statement) -> {
 					connection.setAutoCommit(false);
@@ -162,9 +162,9 @@ public class UserModel {
 					statement.setString(3, getPublicName());
 					statement.setString(4, getAvatar());
 					statement.executeUpdate();
-					DatabaseUtils.lastInsertedId(connection).ifPresent(this::setId);
+					Long id = DatabaseUtils.lastInsertedId(connection).get();
 					connection.commit();
-					return this;
+					return id;
 				});
 	}
 

@@ -9,6 +9,7 @@ import org.github.dmikhaylenko.model.ClearHistoryResponse;
 import org.github.dmikhaylenko.model.DeleteContactResponse;
 import org.github.dmikhaylenko.model.HistoryModel;
 import org.github.dmikhaylenko.model.LogoutResponse;
+import org.github.dmikhaylenko.model.PostMessageResponse;
 import org.github.dmikhaylenko.model.LoginResponse;
 import org.github.dmikhaylenko.model.RegisterUserResponse;
 import org.github.dmikhaylenko.model.ResponseModel;
@@ -79,6 +80,13 @@ public class ResponseUtils {
 	public ClearHistoryResponse createClearHistoryResponse() {
 		ClearHistoryResponse result = new ClearHistoryResponse();
 		initSuccessfulResponseModel(result);
+		return result;
+	}
+	
+	public PostMessageResponse createPostMessageResponse(Long messageId) {
+		PostMessageResponse result = new PostMessageResponse();
+		initSuccessfulResponseModel(result);
+		result.setMessageId(messageId);
 		return result;
 	}
 	

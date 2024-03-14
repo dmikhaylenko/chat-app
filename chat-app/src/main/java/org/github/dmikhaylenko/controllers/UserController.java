@@ -33,7 +33,7 @@ public class UserController {
 			throw ExceptionUtils.createUserWithNickNameExistsException();
 		}
 
-		return ResponseUtils.createRegisterUserResponse(model.insertToUserTable().getId());
+		return ResponseUtils.createRegisterUserResponse(model.insertToUserTable());
 	}
 
 	@GET
