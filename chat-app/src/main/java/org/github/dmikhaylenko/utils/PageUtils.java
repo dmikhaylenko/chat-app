@@ -7,12 +7,16 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class PageUtils {
 	public long normalizePage(Long value) {
+		return normalizePage(value, 1L);
+	}
+	
+	public long normalizePage(Long value, Long defaultValue) {
 		return Optional.ofNullable(value).map(val -> {
 			if (val.compareTo(1L) < 0) {
 				return 1L;
 			}
 			return val;
-		}).orElse(1L);
+		}).orElse(defaultValue);
 	}
 
 	public long normalizePageSize(Long value, long maxValue, long defaultPageSize) {

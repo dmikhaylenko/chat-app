@@ -9,12 +9,14 @@ import org.github.dmikhaylenko.model.ClearHistoryResponse;
 import org.github.dmikhaylenko.model.DeleteContactResponse;
 import org.github.dmikhaylenko.model.HistoryModel;
 import org.github.dmikhaylenko.model.LogoutResponse;
+import org.github.dmikhaylenko.model.MessageViewModel;
 import org.github.dmikhaylenko.model.PostMessageResponse;
 import org.github.dmikhaylenko.model.LoginResponse;
 import org.github.dmikhaylenko.model.RegisterUserResponse;
 import org.github.dmikhaylenko.model.ResponseModel;
 import org.github.dmikhaylenko.model.SearchHistoriesResponse;
 import org.github.dmikhaylenko.model.SearchUsersResponse;
+import org.github.dmikhaylenko.model.ShowHistoryMessages;
 import org.github.dmikhaylenko.model.UserModel;
 
 import lombok.experimental.UtilityClass;
@@ -87,6 +89,15 @@ public class ResponseUtils {
 		PostMessageResponse result = new PostMessageResponse();
 		initSuccessfulResponseModel(result);
 		result.setMessageId(messageId);
+		return result;
+	}
+	
+	public ShowHistoryMessages createShowHistoryMessages(Long page, Long total, List<MessageViewModel> messages) {
+		ShowHistoryMessages result = new ShowHistoryMessages();
+		initSuccessfulResponseModel(result);
+		result.setPg(page);
+		result.setTotal(total);
+		result.setMessages(messages);
 		return result;
 	}
 	

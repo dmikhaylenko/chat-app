@@ -14,6 +14,7 @@ import javax.ws.rs.core.HttpHeaders;
 import org.github.dmikhaylenko.model.AuthTokenModel;
 import org.github.dmikhaylenko.model.HistoryModel;
 import org.github.dmikhaylenko.model.MessageModel;
+import org.github.dmikhaylenko.model.MessageViewModel;
 import org.github.dmikhaylenko.model.ResponseModel;
 import org.github.dmikhaylenko.utils.AuthUtils;
 import org.github.dmikhaylenko.utils.PageUtils;
@@ -58,5 +59,20 @@ public class HistoriesController {
 		UserUtils.checkThatRequestedUserExits(userId);
 		HistoryModel.clearAllMessages(token.getAuthenticatedUser(), userId);
 		return ResponseUtils.createClearHistoryResponse();
+	}
+	
+	@GET
+	@Path("/{userId}/messages")
+	public ResponseModel showHistory(@Context HttpHeaders headers, @PathParam("userId") Long userId, @QueryParam("pg") Long pg,
+			@QueryParam("ps") Long ps) {
+		AuthTokenModel token = AuthUtils.getTokenFromHeader(headers);
+		AuthUtils.checkThatAuthenticated(token);
+		UserUtils.checkThatRequestedUserExits(userId);
+		Long currentUserId = token.getAuthenticatedUser();
+		Long pageSize = PageUtils.normalizePageSize(ps, 500, 500);
+		Long pageNumber = PageUtils.normalizePage(pg, MessageViewModel.getLastPage(currentUserId, pageSize));
+		Long total = MessageViewModel.getTotalMessages(userId, currentUserId);
+		List<MessageViewModel> messages = MessageViewModel.findMessages(userId, currentUserId, pageNumber, pageSize);
+		return ResponseUtils.createShowHistoryMessages(pageNumber, total, messages);
 	}
 }
