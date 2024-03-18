@@ -28,7 +28,8 @@ import lombok.NoArgsConstructor;
 	ClearHistoryResponse.class,
 	PostMessageResponse.class,
 	ShowHistoryMessages.class,
-	EditMessageResponse.class
+	EditMessageResponse.class,
+	DeleteMessageResponse.class
 })
 //@formatter:on
 public class ResponseModel {

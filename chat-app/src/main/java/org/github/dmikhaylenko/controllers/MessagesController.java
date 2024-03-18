@@ -1,5 +1,6 @@
 package org.github.dmikhaylenko.controllers;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -31,5 +32,17 @@ public class MessagesController {
 		messageModel.setMessageText(model.getMessageText());
 		messageModel.updateIntoMessageTable();
 		return ResponseUtils.createEditMessageResponse();
+	}
+
+	@DELETE
+	@Path("/{messageId}")
+	public ResponseModel deleteMessage(@Context HttpHeaders headers, @PathParam("messageId") Long messageId) {
+		AuthTokenModel token = AuthUtils.getTokenFromHeader(headers);
+		AuthUtils.checkAuthenticated(token);
+		MessageModel messageModel = MessageModel.findById(messageId)
+				.orElseThrow(ExceptionUtils::createMissingRequestedMessageException);
+		MessagesUtils.checkMessageDeleteAvailabilityForUser(token.getAuthenticatedUser(), messageModel);
+		messageModel.deleteFromMessageTable();
+		return ResponseUtils.createDeleteMessageResponse();
 	}
 }

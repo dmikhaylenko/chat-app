@@ -62,7 +62,7 @@ public class UserModel {
 	private static final String CHECK_EXISTS_BY_ID_QUERY = "SELECT COUNT(*) > 0 FROM USER WHERE ID = ?";
 
 	public static boolean existsById(Long id) {
-		return DatabaseUtils.executeWithCallStatement(Resources.getChatDb(), CHECK_EXISTS_BY_ID_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), CHECK_EXISTS_BY_ID_QUERY,
 				(connection, statement) -> {
 					statement.setLong(1, id);
 					return DatabaseUtils

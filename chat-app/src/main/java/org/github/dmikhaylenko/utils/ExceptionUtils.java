@@ -57,6 +57,10 @@ public class ExceptionUtils {
 	public ApplicationException createItIsForbiddenToEditForeignUsersMessagesException() {
 		return createApplicationException(10L);
 	}
+	
+	public ApplicationException createItIsForbiddenToDeleteForeignUsersMessagesException() {
+		return createApplicationException(11L);
+	}
 
 	public ApplicationException createUserNotAuthenticatedException(String... challenges) {
 		AuthenticationException exception = new AuthenticationException();

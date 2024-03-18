@@ -11,4 +11,10 @@ public class MessagesUtils {
 			throw ExceptionUtils.createItIsForbiddenToEditForeignUsersMessagesException();
 		}
 	}
+	
+	public void checkMessageDeleteAvailabilityForUser(Long userId, MessageModel messageModel) {
+		if (!userId.equals(messageModel.getSrcId())) {
+			throw ExceptionUtils.createItIsForbiddenToDeleteForeignUsersMessagesException();
+		}
+	}
 }
