@@ -135,6 +135,6 @@ public class ResponseUtils {
 
 	private void initResponseModel(ResponseModel responseModel, Long code) {
 		responseModel.setResponseCode(code);
-		MessageUtils.getErrorMessage(code).ifPresent(responseModel::setResponseMessage);
+		I18nUtils.getErrorMessage(code).ifPresent(responseModel::setResponseMessage);
 	}
 }

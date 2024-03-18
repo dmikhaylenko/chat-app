@@ -11,9 +11,8 @@ import org.github.dmikhaylenko.model.AuthTokenModel;
 import org.github.dmikhaylenko.model.ContactModel;
 import org.github.dmikhaylenko.model.ResponseModel;
 import org.github.dmikhaylenko.utils.AuthUtils;
-import org.github.dmikhaylenko.utils.ExceptionUtils;
+import org.github.dmikhaylenko.utils.ContactUtils;
 import org.github.dmikhaylenko.utils.ResponseUtils;
-import org.github.dmikhaylenko.utils.UserUtils;
 import org.github.dmikhaylenko.utils.ValidationUtils;
 
 @Path("/contacts")
@@ -21,11 +20,11 @@ public class ContactController {
 	@POST
 	public ResponseModel addContact(@Context HttpHeaders headers, ContactModel contact) {
 		ValidationUtils.checkConstraints(contact);
-		AuthTokenModel authToken = AuthUtils.parseAuthToken(headers);
-		AuthUtils.checkAuthenticated(authToken);
+		AuthTokenModel authToken = AuthUtils.getTokenFromHeader(headers);
+		AuthUtils.checkThatAuthenticated(authToken);
 		contact.setUserId(authToken.getAuthenticatedUser());
-		checkThatRequestedUserExits(contact);
-		checkThatContactDoesNotExistIntoTable(contact);
+		ContactUtils.checkThatRequestedUserExits(contact);
+		ContactUtils.checkThatContactDoesNotExistIntoTable(contact);
 		contact.insertIntoContactTable();
 		return ResponseUtils.createAddContactResponse();
 	}
@@ -33,29 +32,13 @@ public class ContactController {
 	@DELETE
 	@Path("/{contactId}")
 	public ResponseModel deleteContact(@Context HttpHeaders headers, @PathParam("contactId") Long contactId) {
-		AuthTokenModel authToken = AuthUtils.parseAuthToken(headers);
-		AuthUtils.checkAuthenticated(authToken);
+		AuthTokenModel authToken = AuthUtils.getTokenFromHeader(headers);
+		AuthUtils.checkThatAuthenticated(authToken);
 		ContactModel contact = new ContactModel();
 		contact.setUserId(authToken.getAuthenticatedUser());
 		contact.setContactId(contactId);
-		checkThatContactExistsIntoTable(contact);
+		ContactUtils.checkThatContactExistsIntoTable(contact);
 		contact.deleteFromContactTable();
 		return ResponseUtils.createDeleteContactResponse();
-	}
-
-	private void checkThatRequestedUserExits(ContactModel contact) {
-		UserUtils.checkThatRequestedUserExits(contact.getContactId());
-	}
-
-	private void checkThatContactDoesNotExistIntoTable(ContactModel contact) {
-		if (contact.existsIntoContactTable()) {
-			throw ExceptionUtils.createContactAlreadyExistsException();
-		}
-	}
-
-	private void checkThatContactExistsIntoTable(ContactModel contact) {
-		if (!contact.existsIntoContactTable()) {
-			throw ExceptionUtils.createMissingRequestedContactException();
-		}
 	}
 }

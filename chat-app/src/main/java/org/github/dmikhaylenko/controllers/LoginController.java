@@ -18,7 +18,7 @@ public class LoginController {
 	@Path("/logout")
 	public ResponseModel logout(@Context HttpHeaders headers) {
 		AuthTokenModel token = AuthUtils.getTokenFromHeader(headers);
-		AuthUtils.checkAuthenticated(token);
+		AuthUtils.checkThatAuthenticated(token);
 		token.logout();
 		return ResponseUtils.createLogoutResponse();
 	}

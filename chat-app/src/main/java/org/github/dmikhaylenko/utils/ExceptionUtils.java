@@ -25,17 +25,17 @@ public class ExceptionUtils {
 	public ApplicationException createUserWithNickNameExistsException() {
 		return createApplicationException(3L);
 	}
-
+	
+	public ApplicationException createWrongLoginOrPasswordException() {
+		return createApplicationException(4L);
+	}
+	
 	public ApplicationException createAuthenticationException(String... challenges) {
 		AuthenticationException exception = new AuthenticationException();
 		exception.setCode(5L);
 		exception.setChallenge(Arrays.asList(challenges));
 		exception.setChallenges(Arrays.asList(challenges));
 		return exception;
-	}
-	
-	public ApplicationException createWrongLoginAndPasswordException() {
-		return createApplicationException(4L);
 	}
 	
 	public ApplicationException createMissingRequestedUserException() {
@@ -60,17 +60,6 @@ public class ExceptionUtils {
 	
 	public ApplicationException createItIsForbiddenToDeleteForeignUsersMessagesException() {
 		return createApplicationException(11L);
-	}
-
-	public ApplicationException createUserNotAuthenticatedException(String... challenges) {
-		AuthenticationException exception = new AuthenticationException();
-		exception.setCode(5L);
-		exception.setChallenges(Arrays.asList(challenges));
-		return exception;
-	}
-
-	public ApplicationException createWrongLoginOrPasswordException() {
-		return createApplicationException(4L);
 	}
 	
 	private ApplicationException createApplicationException(Long code) {

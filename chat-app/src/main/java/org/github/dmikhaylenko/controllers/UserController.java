@@ -18,6 +18,7 @@ import org.github.dmikhaylenko.utils.AuthUtils;
 import org.github.dmikhaylenko.utils.ExceptionUtils;
 import org.github.dmikhaylenko.utils.PageUtils;
 import org.github.dmikhaylenko.utils.ResponseUtils;
+import org.github.dmikhaylenko.utils.UserUtils;
 import org.github.dmikhaylenko.utils.ValidationUtils;
 
 @Path("/users")
@@ -25,14 +26,8 @@ public class UserController {
 	@POST
 	public ResponseModel registerUser(UserModel model) {
 		ValidationUtils.checkConstraints(model);
-		if (model.existsWithThePhone()) {
-			throw ExceptionUtils.createUserWithPhoneExistsException();
-		}
-
-		if (model.existsWithTheNickname()) {
-			throw ExceptionUtils.createUserWithNickNameExistsException();
-		}
-
+		UserUtils.checkThatUserWithPhoneExists(model);
+		UserUtils.checkThatUserWithNickNameExists(model);
 		return ResponseUtils.createRegisterUserResponse(model.insertToUserTable());
 	}
 
@@ -40,7 +35,7 @@ public class UserController {
 	@Path("/search")
 	public ResponseModel searchUsers(@Context HttpHeaders headers, @QueryParam("sstr") String sstr,
 			@QueryParam("pg") Long pg, @QueryParam("ps") Long ps) {
-		AuthUtils.checkAuthenticated(AuthUtils.parseAuthToken(headers));
+		AuthUtils.checkThatAuthenticated(AuthUtils.getTokenFromHeader(headers));
 		Long normalizedPg = PageUtils.normalizePage(pg);
 		Long normalizedPs = PageUtils.normalizePageSize(ps, 1000L, 50L);
 		List<UserModel> users = UserModel.findByPhoneOrUsername(sstr, normalizedPg, normalizedPs);
@@ -52,11 +47,11 @@ public class UserController {
 	@Path("/current/password")
 	public ResponseModel changePassword(@Context HttpHeaders headers, ChangePasswordModel model) {
 		ValidationUtils.checkConstraints(model);
-		AuthTokenModel token = AuthUtils.getTokenFromHeaders(headers);
+		AuthTokenModel token = AuthUtils.getTokenFromHeader(headers);
 		AuthUtils.checkThatAuthenticated(token);
 
 		Long userId = model.findUserByCredentials().filter(value -> Objects.equals(value, token.getAuthenticatedUser()))
-				.orElseThrow(ExceptionUtils::createWrongLoginAndPasswordException);
+				.orElseThrow(ExceptionUtils::createWrongLoginOrPasswordException);
 
 		UserModel userModel = UserModel.findById(userId).get();
 		userModel.setPassword(model.getNewPassword());
