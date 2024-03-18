@@ -38,7 +38,7 @@ public class MessagesController {
 	@Path("/{messageId}")
 	public ResponseModel deleteMessage(@Context HttpHeaders headers, @PathParam("messageId") Long messageId) {
 		AuthTokenModel token = AuthUtils.getTokenFromHeader(headers);
-		AuthUtils.checkAuthenticated(token);
+		AuthUtils.checkThatAuthenticated(token);
 		MessageModel messageModel = MessageModel.findById(messageId)
 				.orElseThrow(ExceptionUtils::createMissingRequestedMessageException);
 		MessagesUtils.checkMessageDeleteAvailabilityForUser(token.getAuthenticatedUser(), messageModel);

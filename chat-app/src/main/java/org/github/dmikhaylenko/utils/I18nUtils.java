@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class MessageUtils {
+public class I18nUtils {
 	public Optional<String> getErrorMessage(Long errorCode) {
 		return getMessage("ERROR_" + errorCode);
 	}

@@ -29,7 +29,7 @@ public class HistoriesController {
 	public ResponseModel searchHistories(@Context HttpHeaders headers, @QueryParam("pg") Long pg,
 			@QueryParam("ps") Long ps) {
 		TimezoneUtils.loadZoneOffset(headers);
-		AuthTokenModel token = AuthUtils.parseAuthToken(headers);
+		AuthTokenModel token = AuthUtils.getTokenFromHeader(headers);
 		AuthUtils.checkThatAuthenticated(token);
 		Long page = PageUtils.normalizePage(pg);
 		Long pageSize = PageUtils.normalizePageSize(ps, 500, 500);
@@ -38,13 +38,14 @@ public class HistoriesController {
 		Long totalUnwatched = HistoryModel.countUnwatchedHistories(token);
 		return ResponseUtils.createSearchHistoriesResponse(histories, total, totalUnwatched);
 	}
-	
+
 	@POST
 	@Path("/{userId}")
-	public ResponseModel postMessage(@Context HttpHeaders headers, @PathParam("userId") Long userId, MessageModel message) {
+	public ResponseModel postMessage(@Context HttpHeaders headers, @PathParam("userId") Long userId,
+			MessageModel message) {
 		ValidationUtils.checkConstraints(message);
-		AuthTokenModel token = AuthUtils.parseAuthToken(headers);
-		AuthUtils.checkAuthenticated(token);
+		AuthTokenModel token = AuthUtils.getTokenFromHeader(headers);
+		AuthUtils.checkThatAuthenticated(token);
 		UserUtils.checkThatRequestedUserExits(userId);
 		message.setSrcId(token.getAuthenticatedUser());
 		message.setDestId(userId);
@@ -54,17 +55,17 @@ public class HistoriesController {
 	@DELETE
 	@Path("/{userId}")
 	public ResponseModel clearHistory(@Context HttpHeaders headers, @PathParam("userId") Long userId) {
-		AuthTokenModel token = AuthUtils.parseAuthToken(headers);
-		AuthUtils.checkAuthenticated(token);
+		AuthTokenModel token = AuthUtils.getTokenFromHeader(headers);
+		AuthUtils.checkThatAuthenticated(token);
 		UserUtils.checkThatRequestedUserExits(userId);
 		HistoryModel.clearAllMessages(token.getAuthenticatedUser(), userId);
 		return ResponseUtils.createClearHistoryResponse();
 	}
-	
+
 	@GET
 	@Path("/{userId}/messages")
-	public ResponseModel showHistory(@Context HttpHeaders headers, @PathParam("userId") Long userId, @QueryParam("pg") Long pg,
-			@QueryParam("ps") Long ps) {
+	public ResponseModel showHistory(@Context HttpHeaders headers, @PathParam("userId") Long userId,
+			@QueryParam("pg") Long pg, @QueryParam("ps") Long ps) {
 		AuthTokenModel token = AuthUtils.getTokenFromHeader(headers);
 		AuthUtils.checkThatAuthenticated(token);
 		UserUtils.checkThatRequestedUserExits(userId);
