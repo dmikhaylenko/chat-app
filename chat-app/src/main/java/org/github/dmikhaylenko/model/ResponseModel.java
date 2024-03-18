@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @XmlType(name = "Response")
 @XmlAccessorType(XmlAccessType.FIELD)
+// @formatter:off
 @XmlSeeAlso({
 	RegisterUserResponse.class,
 	SearchUsersResponse.class,
@@ -26,12 +27,14 @@ import lombok.NoArgsConstructor;
 	DeleteContactResponse.class,
 	ClearHistoryResponse.class,
 	PostMessageResponse.class,
-	ShowHistoryMessages.class
+	ShowHistoryMessages.class,
+	EditMessageResponse.class
 })
+//@formatter:on
 public class ResponseModel {
 	@XmlElement
 	private Long responseCode;
-	
+
 	@XmlElement
 	private String responseMessage;
 }

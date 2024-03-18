@@ -49,6 +49,14 @@ public class ExceptionUtils {
 	public ApplicationException createMissingRequestedContactException() {
 		return createApplicationException(8L);
 	}
+	
+	public ApplicationException createMissingRequestedMessageException() {
+		return createApplicationException(9L);
+	}
+	
+	public ApplicationException createItIsForbiddenToEditForeignUsersMessagesException() {
+		return createApplicationException(10L);
+	}
 
 	public ApplicationException createUserNotAuthenticatedException(String... challenges) {
 		AuthenticationException exception = new AuthenticationException();

@@ -168,7 +168,7 @@ public class UserModel {
 				});
 	}
 
-	private static final String UPDATE_INTO_USER_TABLE_QUERY = "UPDATE USER SET PHONE=?,PASSWORD=?, USERNAME=?, AVATAR_HREF=? WHERE ID=?";
+	private static final String UPDATE_INTO_USER_TABLE_QUERY = "UPDATE USER SET PHONE=?, PASSWORD=?, USERNAME=?, AVATAR_HREF=? WHERE ID=?";
 
 	public UserModel updateIntoUserTable() {
 		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), UPDATE_INTO_USER_TABLE_QUERY,

@@ -7,6 +7,7 @@ import org.github.dmikhaylenko.model.AddContactResponse;
 import org.github.dmikhaylenko.model.ChangePasswordResponse;
 import org.github.dmikhaylenko.model.ClearHistoryResponse;
 import org.github.dmikhaylenko.model.DeleteContactResponse;
+import org.github.dmikhaylenko.model.EditMessageResponse;
 import org.github.dmikhaylenko.model.HistoryModel;
 import org.github.dmikhaylenko.model.LogoutResponse;
 import org.github.dmikhaylenko.model.MessageViewModel;
@@ -98,6 +99,12 @@ public class ResponseUtils {
 		result.setPg(page);
 		result.setTotal(total);
 		result.setMessages(messages);
+		return result;
+	}
+	
+	public EditMessageResponse createEditMessageResponse() {
+		EditMessageResponse result = new EditMessageResponse();
+		initSuccessfulResponseModel(result);
 		return result;
 	}
 	
