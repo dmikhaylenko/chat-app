@@ -11,6 +11,8 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
+import org.github.dmikhaylenko.errors.CheckedExceptionWrapper;
+
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -31,7 +33,7 @@ public class DatabaseUtils {
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			return fn.consumeStatement(connection, statement);
 		} catch (SQLException error) {
-			throw ExceptionUtils.uncheckedOf(error);
+			throw CheckedExceptionWrapper.uncheckedOf(error);
 		}
 	}
 
@@ -45,7 +47,7 @@ public class DatabaseUtils {
 		try (CallableStatement statement = connection.prepareCall(sql)) {
 			return fn.consumeStatement(connection, statement);
 		} catch (SQLException error) {
-			throw ExceptionUtils.uncheckedOf(error);
+			throw CheckedExceptionWrapper.uncheckedOf(error);
 		}
 	}
 
@@ -53,7 +55,7 @@ public class DatabaseUtils {
 		try (Connection connection = dataSource.getConnection()) {
 			return fn.consumeStatement(connection);
 		} catch (SQLException error) {
-			throw ExceptionUtils.uncheckedOf(error);
+			throw CheckedExceptionWrapper.uncheckedOf(error);
 		}
 	}
 

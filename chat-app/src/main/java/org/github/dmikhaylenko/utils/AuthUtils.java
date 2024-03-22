@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import javax.ws.rs.core.HttpHeaders;
 
+import org.github.dmikhaylenko.errors.AuthenticationException;
 import org.github.dmikhaylenko.model.AuthTokenModel;
 
 import lombok.experimental.UtilityClass;
@@ -22,7 +23,7 @@ public class AuthUtils {
 
 	public void checkThatAuthenticated(AuthTokenModel authToken) {
 		if (!authToken.isAuthenticated()) {
-			throw ExceptionUtils.createAuthenticationException("AUTH_TOKEN");
+			throw new AuthenticationException("AUTH_TOKEN");
 		}
 	}
 

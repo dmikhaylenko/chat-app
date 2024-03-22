@@ -10,12 +10,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
+import org.github.dmikhaylenko.errors.WrongLoginOrPasswordException;
 import org.github.dmikhaylenko.model.AuthTokenModel;
 import org.github.dmikhaylenko.model.ChangePasswordModel;
 import org.github.dmikhaylenko.model.ResponseModel;
 import org.github.dmikhaylenko.model.UserModel;
 import org.github.dmikhaylenko.utils.AuthUtils;
-import org.github.dmikhaylenko.utils.ExceptionUtils;
 import org.github.dmikhaylenko.utils.PageUtils;
 import org.github.dmikhaylenko.utils.ResponseUtils;
 import org.github.dmikhaylenko.utils.UserUtils;
@@ -51,7 +51,7 @@ public class UserController {
 		AuthUtils.checkThatAuthenticated(token);
 
 		Long userId = model.findUserByCredentials().filter(value -> Objects.equals(value, token.getAuthenticatedUser()))
-				.orElseThrow(ExceptionUtils::createWrongLoginOrPasswordException);
+				.orElseThrow(WrongLoginOrPasswordException::new);
 
 		UserModel userModel = UserModel.findById(userId).get();
 		userModel.setPassword(model.getNewPassword());

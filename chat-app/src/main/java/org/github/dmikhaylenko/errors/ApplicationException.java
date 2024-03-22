@@ -1,11 +1,15 @@
 package org.github.dmikhaylenko.errors;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
-@Data
+@Getter
+@ToString
+@RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class ApplicationException extends RuntimeException {
 	private static final long serialVersionUID = 8079929291360821838L;
-	private Long code;
+	private final Long code;
 }
