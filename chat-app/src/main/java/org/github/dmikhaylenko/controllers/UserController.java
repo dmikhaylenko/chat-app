@@ -13,11 +13,13 @@ import javax.ws.rs.core.HttpHeaders;
 import org.github.dmikhaylenko.errors.WrongLoginOrPasswordException;
 import org.github.dmikhaylenko.model.AuthTokenModel;
 import org.github.dmikhaylenko.model.ChangePasswordModel;
+import org.github.dmikhaylenko.model.ChangePasswordResponse;
+import org.github.dmikhaylenko.model.RegisterUserResponse;
 import org.github.dmikhaylenko.model.ResponseModel;
+import org.github.dmikhaylenko.model.SearchUsersResponse;
 import org.github.dmikhaylenko.model.UserModel;
 import org.github.dmikhaylenko.utils.AuthUtils;
 import org.github.dmikhaylenko.utils.PageUtils;
-import org.github.dmikhaylenko.utils.ResponseUtils;
 import org.github.dmikhaylenko.utils.UserUtils;
 import org.github.dmikhaylenko.utils.ValidationUtils;
 
@@ -28,7 +30,7 @@ public class UserController {
 		ValidationUtils.checkConstraints(model);
 		UserUtils.checkThatUserWithPhoneExists(model);
 		UserUtils.checkThatUserWithNickNameExists(model);
-		return ResponseUtils.createRegisterUserResponse(model.insertToUserTable());
+		return new RegisterUserResponse(model.insertToUserTable());
 	}
 
 	@GET
@@ -40,7 +42,7 @@ public class UserController {
 		Long normalizedPs = PageUtils.normalizePageSize(ps, 1000L, 50L);
 		List<UserModel> users = UserModel.findByPhoneOrUsername(sstr, normalizedPg, normalizedPs);
 		Long total = UserModel.countByPhoneOrUsername(sstr);
-		return ResponseUtils.createSearchUsersResponse(users, total);
+		return new SearchUsersResponse(users, total);
 	}
 	
 	@POST
@@ -56,6 +58,6 @@ public class UserController {
 		UserModel userModel = UserModel.findById(userId).get();
 		userModel.setPassword(model.getNewPassword());
 
-		return ResponseUtils.createChangePasswordResponse(userModel.updateIntoUserTable().getId());
+		return new ChangePasswordResponse(userModel.updateIntoUserTable().getId());
 	}
 }

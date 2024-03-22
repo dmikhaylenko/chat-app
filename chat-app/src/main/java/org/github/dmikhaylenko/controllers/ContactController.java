@@ -7,12 +7,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
+import org.github.dmikhaylenko.model.AddContactResponse;
 import org.github.dmikhaylenko.model.AuthTokenModel;
 import org.github.dmikhaylenko.model.ContactModel;
+import org.github.dmikhaylenko.model.DeleteContactResponse;
 import org.github.dmikhaylenko.model.ResponseModel;
 import org.github.dmikhaylenko.utils.AuthUtils;
 import org.github.dmikhaylenko.utils.ContactUtils;
-import org.github.dmikhaylenko.utils.ResponseUtils;
 import org.github.dmikhaylenko.utils.ValidationUtils;
 
 @Path("/contacts")
@@ -26,7 +27,7 @@ public class ContactController {
 		ContactUtils.checkThatRequestedUserExits(contact);
 		ContactUtils.checkThatContactDoesNotExistIntoTable(contact);
 		contact.insertIntoContactTable();
-		return ResponseUtils.createAddContactResponse();
+		return new AddContactResponse();
 	}
 
 	@DELETE
@@ -39,6 +40,6 @@ public class ContactController {
 		contact.setContactId(contactId);
 		ContactUtils.checkThatContactExistsIntoTable(contact);
 		contact.deleteFromContactTable();
-		return ResponseUtils.createDeleteContactResponse();
+		return new DeleteContactResponse();
 	}
 }

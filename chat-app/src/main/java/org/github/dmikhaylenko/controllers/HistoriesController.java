@@ -12,13 +12,16 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
 import org.github.dmikhaylenko.model.AuthTokenModel;
+import org.github.dmikhaylenko.model.ClearHistoryResponse;
 import org.github.dmikhaylenko.model.HistoryModel;
 import org.github.dmikhaylenko.model.MessageModel;
 import org.github.dmikhaylenko.model.MessageViewModel;
+import org.github.dmikhaylenko.model.PostMessageResponse;
 import org.github.dmikhaylenko.model.ResponseModel;
+import org.github.dmikhaylenko.model.SearchHistoriesResponse;
+import org.github.dmikhaylenko.model.ShowHistoryMessages;
 import org.github.dmikhaylenko.utils.AuthUtils;
 import org.github.dmikhaylenko.utils.PageUtils;
-import org.github.dmikhaylenko.utils.ResponseUtils;
 import org.github.dmikhaylenko.utils.TimezoneUtils;
 import org.github.dmikhaylenko.utils.UserUtils;
 import org.github.dmikhaylenko.utils.ValidationUtils;
@@ -36,7 +39,7 @@ public class HistoriesController {
 		List<HistoryModel> histories = HistoryModel.findHistories(token, page, pageSize);
 		Long total = HistoryModel.countHistories(token);
 		Long totalUnwatched = HistoryModel.countUnwatchedHistories(token);
-		return ResponseUtils.createSearchHistoriesResponse(histories, total, totalUnwatched);
+		return new SearchHistoriesResponse(histories, total, totalUnwatched);
 	}
 
 	@POST
@@ -49,7 +52,7 @@ public class HistoriesController {
 		UserUtils.checkThatRequestedUserExits(userId);
 		message.setSrcId(token.getAuthenticatedUser());
 		message.setDestId(userId);
-		return ResponseUtils.createPostMessageResponse(message.insertIntoMessageTable());
+		return new PostMessageResponse(message.insertIntoMessageTable());
 	}
 
 	@DELETE
@@ -59,7 +62,7 @@ public class HistoriesController {
 		AuthUtils.checkThatAuthenticated(token);
 		UserUtils.checkThatRequestedUserExits(userId);
 		HistoryModel.clearAllMessages(token.getAuthenticatedUser(), userId);
-		return ResponseUtils.createClearHistoryResponse();
+		return new ClearHistoryResponse();
 	}
 
 	@GET
@@ -74,6 +77,6 @@ public class HistoriesController {
 		Long pageNumber = PageUtils.normalizePage(pg, MessageViewModel.getLastPage(currentUserId, pageSize));
 		Long total = MessageViewModel.getTotalMessages(userId, currentUserId);
 		List<MessageViewModel> messages = MessageViewModel.findMessages(userId, currentUserId, pageNumber, pageSize);
-		return ResponseUtils.createShowHistoryMessages(pageNumber, total, messages);
+		return new ShowHistoryMessages(pageNumber, total, messages);
 	}
 }

@@ -5,6 +5,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.github.dmikhaylenko.errors.ApplicationException;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,9 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "LogoutResponse")
-public class LogoutResponse extends SuccessResponse {
+@XmlType(name = "ApplicationErrorResponse")
+public class ApplicationErrorResponse extends ResponseModel {
+	public ApplicationErrorResponse(ApplicationException error) {
+		super(error.getCode());
+	}
 }
