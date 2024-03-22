@@ -7,12 +7,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
+import org.github.dmikhaylenko.errors.MissingRequestedMessageException;
 import org.github.dmikhaylenko.model.AuthTokenModel;
 import org.github.dmikhaylenko.model.EditMessageModel;
 import org.github.dmikhaylenko.model.MessageModel;
 import org.github.dmikhaylenko.model.ResponseModel;
 import org.github.dmikhaylenko.utils.AuthUtils;
-import org.github.dmikhaylenko.utils.ExceptionUtils;
 import org.github.dmikhaylenko.utils.MessagesUtils;
 import org.github.dmikhaylenko.utils.ResponseUtils;
 import org.github.dmikhaylenko.utils.ValidationUtils;
@@ -27,7 +27,7 @@ public class MessagesController {
 		AuthTokenModel token = AuthUtils.getTokenFromHeader(headers);
 		AuthUtils.checkThatAuthenticated(token);
 		MessageModel messageModel = MessageModel.findById(messageId)
-				.orElseThrow(ExceptionUtils::createMissingRequestedMessageException);
+				.orElseThrow(MissingRequestedMessageException::new);
 		MessagesUtils.checkMessageEditingAvailabilityForUser(token.getAuthenticatedUser(), messageModel);
 		messageModel.setMessageText(model.getMessageText());
 		messageModel.updateIntoMessageTable();
@@ -40,7 +40,7 @@ public class MessagesController {
 		AuthTokenModel token = AuthUtils.getTokenFromHeader(headers);
 		AuthUtils.checkThatAuthenticated(token);
 		MessageModel messageModel = MessageModel.findById(messageId)
-				.orElseThrow(ExceptionUtils::createMissingRequestedMessageException);
+				.orElseThrow(MissingRequestedMessageException::new);
 		MessagesUtils.checkMessageDeleteAvailabilityForUser(token.getAuthenticatedUser(), messageModel);
 		messageModel.deleteFromMessageTable();
 		return ResponseUtils.createDeleteMessageResponse();

@@ -1,5 +1,8 @@
 package org.github.dmikhaylenko.utils;
 
+import org.github.dmikhaylenko.errors.MissingRequestedUserException;
+import org.github.dmikhaylenko.errors.UserWithNickNameExistsException;
+import org.github.dmikhaylenko.errors.UserWithPhoneExistsException;
 import org.github.dmikhaylenko.model.UserModel;
 
 import lombok.experimental.UtilityClass;
@@ -8,19 +11,19 @@ import lombok.experimental.UtilityClass;
 public class UserUtils {
 	public void checkThatUserWithPhoneExists(UserModel userModel) {
 		if (userModel.existsWithThePhone()) {
-			throw ExceptionUtils.createUserWithPhoneExistsException();
+			throw new UserWithPhoneExistsException();
 		}
 	}
 	
 	public void checkThatUserWithNickNameExists(UserModel userModel) {
 		if (userModel.existsWithTheNickname()) {
-			throw ExceptionUtils.createUserWithNickNameExistsException();
+			throw new UserWithNickNameExistsException();
 		}
 	}
 	
 	public void checkThatRequestedUserExits(Long userId) {
 		if (!UserModel.existsById(userId)) {
-			throw ExceptionUtils.createMissingRequestedUserException();
+			throw new MissingRequestedUserException();
 		}
 	}
 }

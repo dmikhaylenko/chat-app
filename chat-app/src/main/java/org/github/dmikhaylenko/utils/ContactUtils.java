@@ -1,5 +1,7 @@
 package org.github.dmikhaylenko.utils;
 
+import org.github.dmikhaylenko.errors.ContactAlreadyExistsException;
+import org.github.dmikhaylenko.errors.MissingRequestedContactException;
 import org.github.dmikhaylenko.model.ContactModel;
 
 import lombok.experimental.UtilityClass;
@@ -12,13 +14,13 @@ public class ContactUtils {
 
 	public void checkThatContactDoesNotExistIntoTable(ContactModel contact) {
 		if (contact.existsIntoContactTable()) {
-			throw ExceptionUtils.createContactAlreadyExistsException();
+			throw new ContactAlreadyExistsException();
 		}
 	}
 
 	public void checkThatContactExistsIntoTable(ContactModel contact) {
 		if (!contact.existsIntoContactTable()) {
-			throw ExceptionUtils.createMissingRequestedContactException();
+			throw new MissingRequestedContactException();
 		}
 	}
 }
