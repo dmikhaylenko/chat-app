@@ -9,12 +9,13 @@ import javax.ws.rs.core.HttpHeaders;
 
 import org.github.dmikhaylenko.errors.MissingRequestedMessageException;
 import org.github.dmikhaylenko.model.AuthTokenModel;
+import org.github.dmikhaylenko.model.DeleteMessageResponse;
 import org.github.dmikhaylenko.model.EditMessageModel;
+import org.github.dmikhaylenko.model.EditMessageResponse;
 import org.github.dmikhaylenko.model.MessageModel;
 import org.github.dmikhaylenko.model.ResponseModel;
 import org.github.dmikhaylenko.utils.AuthUtils;
 import org.github.dmikhaylenko.utils.MessagesUtils;
-import org.github.dmikhaylenko.utils.ResponseUtils;
 import org.github.dmikhaylenko.utils.ValidationUtils;
 
 @Path("/messages")
@@ -31,7 +32,7 @@ public class MessagesController {
 		MessagesUtils.checkMessageEditingAvailabilityForUser(token.getAuthenticatedUser(), messageModel);
 		messageModel.setMessageText(model.getMessageText());
 		messageModel.updateIntoMessageTable();
-		return ResponseUtils.createEditMessageResponse();
+		return new EditMessageResponse();
 	}
 
 	@DELETE
@@ -43,6 +44,6 @@ public class MessagesController {
 				.orElseThrow(MissingRequestedMessageException::new);
 		MessagesUtils.checkMessageDeleteAvailabilityForUser(token.getAuthenticatedUser(), messageModel);
 		messageModel.deleteFromMessageTable();
-		return ResponseUtils.createDeleteMessageResponse();
+		return new DeleteMessageResponse();
 	}
 }

@@ -7,15 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
 @XmlRootElement
-@NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "LogoutResponse")
-public class LogoutResponse extends SuccessResponse {
+@XmlType(name = "NonApplicationErrorResponse")
+public class NonApplicationErrorResponse extends ResponseModel {
+	public NonApplicationErrorResponse() {
+		super(-1L);
+	}
 }

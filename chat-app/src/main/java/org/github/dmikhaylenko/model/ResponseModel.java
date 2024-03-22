@@ -7,29 +7,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.github.dmikhaylenko.utils.I18nUtils;
 
-@Data
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+@Getter
+@ToString
 @XmlRootElement
 @NoArgsConstructor
+@EqualsAndHashCode
 @XmlType(name = "Response")
 @XmlAccessorType(XmlAccessType.FIELD)
 // @formatter:off
 @XmlSeeAlso({
-	RegisterUserResponse.class,
-	SearchUsersResponse.class,
-	LogoutResponse.class,
-	ChangePasswordResponse.class,
-	LoginResponse.class,
-	SearchHistoriesResponse.class,
-	AddContactResponse.class,
-	DeleteContactResponse.class,
-	ClearHistoryResponse.class,
-	PostMessageResponse.class,
-	ShowHistoryMessages.class,
-	EditMessageResponse.class,
-	DeleteMessageResponse.class
+	SuccessResponse.class,
+	ApplicationErrorResponse.class
 })
 //@formatter:on
 public class ResponseModel {
@@ -38,4 +33,13 @@ public class ResponseModel {
 
 	@XmlElement
 	private String responseMessage;
+
+	public ResponseModel(Long responseCode) {
+		super();
+		this.responseCode = responseCode;
+		this.responseMessage = I18nUtils.getErrorMessage(responseCode).get();
+	}
+	
+	
+	
 }

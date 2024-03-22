@@ -6,17 +6,21 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@Data
+@Getter
 @XmlRootElement
 @NoArgsConstructor
+@AllArgsConstructor
+@ToString(callSuper = true)
 @XmlType(name = "LoginResponse")
 @EqualsAndHashCode(callSuper = true)
 @XmlAccessorType(XmlAccessType.FIELD)
-public class LoginResponse extends ResponseModel {
+public class LoginResponse extends SuccessResponse {
 	@XmlElement
 	private String token;
 }
