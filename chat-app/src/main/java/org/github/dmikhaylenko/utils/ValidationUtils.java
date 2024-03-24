@@ -11,8 +11,13 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ValidationUtils {
+	private Validator validator = null;
+	
+	public void initialize(Validator validator) {
+		ValidationUtils.validator = validator;
+	}
+	
 	public <T> void checkConstraints(T validatable) {
-		Validator validator = Resources.getValidator();
 		Set<ConstraintViolation<T>> violations = validator.validate(validatable);
 		if (!violations.isEmpty()) {
 			throw new ValidationException();

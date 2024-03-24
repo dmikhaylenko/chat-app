@@ -13,7 +13,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RsRowParser;
-import org.github.dmikhaylenko.utils.Resources;
 import org.github.dmikhaylenko.utils.TimeUtils;
 
 import lombok.EqualsAndHashCode;
@@ -55,7 +54,7 @@ public class MessageViewModel {
 	// @formatter:on
 
 	public static Long getLastPage(Long currentUserId, Long ps) {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), GET_LAST_PAGE_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(GET_LAST_PAGE_QUERY,
 				(connection, statement) -> {
 					statement.setLong(1, ps);
 					statement.setLong(2, currentUserId);
@@ -84,7 +83,7 @@ public class MessageViewModel {
 	// @formatter:on
 
 	public static List<MessageViewModel> findMessages(Long userId, Long currentUserId, Pagination pagination) {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), FIND_MESSAGES_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(FIND_MESSAGES_QUERY,
 				(connection, statement) -> {
 					statement.setLong(1, userId);
 					statement.setLong(2, currentUserId);
@@ -107,7 +106,7 @@ public class MessageViewModel {
 	// @formatter:on
 
 	public static Long getTotalMessages(Long userId, Long currentUserId) {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), GET_TOTAL_MESSAGES_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(GET_TOTAL_MESSAGES_QUERY,
 				(connection, statement) -> {
 					statement.setLong(1, userId);
 					statement.setLong(2, currentUserId);

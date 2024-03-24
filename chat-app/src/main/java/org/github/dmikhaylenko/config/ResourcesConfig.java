@@ -11,8 +11,9 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 import javax.validation.Validator;
 
-import org.github.dmikhaylenko.utils.Resources;
+import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.TimezoneUtils;
+import org.github.dmikhaylenko.utils.ValidationUtils;
 
 @ApplicationScoped
 public class ResourcesConfig {
@@ -23,8 +24,8 @@ public class ResourcesConfig {
 	private Validator validator;
 
 	public void registerResources(@Observes @Initialized(ApplicationScoped.class) Object pointless) {
-		Resources.setChatDb(chatDb);
-		Resources.setValidator(validator);
+		DatabaseUtils.initialize(chatDb);
+		ValidationUtils.initialize(validator);
 		TimezoneUtils.setDefaultZoneOffset(ZoneOffset.ofHours(3));
 	}
 }

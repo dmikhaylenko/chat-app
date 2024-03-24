@@ -18,7 +18,6 @@ import org.github.dmikhaylenko.errors.ItIsForbiddenToEditForeignUsersMessagesExc
 import org.github.dmikhaylenko.errors.MissingRequestedMessageException;
 import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RsRowParser;
-import org.github.dmikhaylenko.utils.Resources;
 import org.github.dmikhaylenko.utils.TimeUtils;
 
 import lombok.EqualsAndHashCode;
@@ -99,7 +98,7 @@ public class MessageModel {
 	// @formatter:on
 
 	private static Optional<MessageModel> findById(Long id) {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), FIND_MESSAGE_BY_ID_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(FIND_MESSAGE_BY_ID_QUERY,
 				(connection, statement) -> {
 					statement.setLong(1, id);
 					return DatabaseUtils.parseResultSetSingleRow(statement.executeQuery(), new MessageModelRowParser());
@@ -114,7 +113,7 @@ public class MessageModel {
 	// @formatter:on
 
 	private Long insertIntoMessageTable() {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), INSERT_MESSAGE_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(INSERT_MESSAGE_QUERY,
 				(connection, statement) -> {
 					connection.setAutoCommit(false);
 					statement.setLong(1, srcId);
@@ -141,7 +140,7 @@ public class MessageModel {
 	// @formatter:on
 
 	private void updateIntoMessageTable() {
-		DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), UPDATE_MESSAGE_QUERY,
+		DatabaseUtils.executeWithPreparedStatement(UPDATE_MESSAGE_QUERY,
 				(connection, statement) -> {
 					connection.setAutoCommit(false);
 					statement.setLong(1, srcId);
@@ -161,7 +160,7 @@ public class MessageModel {
 	// @formatter:on
 
 	private void deleteFromMessageTable() {
-		DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), DELETE_MESSAGE_QUERY,
+		DatabaseUtils.executeWithPreparedStatement(DELETE_MESSAGE_QUERY,
 				(connection, statement) -> {
 					connection.setAutoCommit(false);
 					statement.setLong(1, id);

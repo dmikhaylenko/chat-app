@@ -13,7 +13,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.github.dmikhaylenko.errors.WrongLoginOrPasswordException;
 import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RowParsers;
-import org.github.dmikhaylenko.utils.Resources;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -55,7 +54,7 @@ public class ChangePasswordModel {
 	}
 	
 	private Optional<Long> findUserByCredentials() {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), FIND_USER_BY_CREDENTIALS_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(FIND_USER_BY_CREDENTIALS_QUERY,
 				(connection, statement) -> {
 					statement.setString(1, getUsername());
 					statement.setString(2, getOldPassword());

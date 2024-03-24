@@ -15,7 +15,6 @@ import org.github.dmikhaylenko.adapters.JaxbLocalDateTimeAdapter;
 import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RsRowParser;
-import org.github.dmikhaylenko.utils.Resources;
 import org.github.dmikhaylenko.utils.TimeUtils;
 
 import lombok.EqualsAndHashCode;
@@ -68,7 +67,7 @@ public class HistoryModel {
 	// @formatter:on
 
 	public static List<HistoryModel> findHistories(AuthTokenModel token, Pagination pagination) {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), FIND_HISTORIES_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(FIND_HISTORIES_QUERY,
 				(connection, statement) -> {
 					statement.setString(1, token.getToken());
 					statement.setLong(2, pagination.getPageSize());
@@ -87,7 +86,7 @@ public class HistoryModel {
 	// @formatter:on
 
 	public static Long countHistories(AuthTokenModel token) {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), COUNT_HISTORIES_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(COUNT_HISTORIES_QUERY,
 				(connection, statement) -> {
 					statement.setString(1, token.getToken());
 					return DatabaseUtils
@@ -111,7 +110,7 @@ public class HistoryModel {
 	// @formatter:on
 
 	public static Long countUnwatchedHistories(AuthTokenModel token) {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), COUNT_UNWATCHED_HISTORIES_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(COUNT_UNWATCHED_HISTORIES_QUERY,
 				(connection, statement) -> {
 					statement.setString(1, token.getToken());
 					return DatabaseUtils
@@ -128,7 +127,7 @@ public class HistoryModel {
 	// @formatter:on
 
 	public static void clearAllMessages(Long currentUserId, Long userId) {
-		DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), CLEAR_ALL_MESSAGES_QUERY,
+		DatabaseUtils.executeWithPreparedStatement(CLEAR_ALL_MESSAGES_QUERY,
 				(connection, statement) -> {
 					statement.setLong(1, currentUserId);
 					statement.setLong(2, userId);

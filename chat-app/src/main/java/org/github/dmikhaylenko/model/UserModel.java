@@ -23,7 +23,6 @@ import org.github.dmikhaylenko.errors.UserWithPhoneExistsException;
 import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RsRowParser;
-import org.github.dmikhaylenko.utils.Resources;
 import org.github.dmikhaylenko.utils.TimeUtils;
 
 import lombok.EqualsAndHashCode;
@@ -72,7 +71,7 @@ public class UserModel {
 	private static final String CHECK_EXISTS_BY_ID_QUERY = "SELECT COUNT(*) > 0 FROM USER WHERE ID = ?";
 
 	public static boolean existsById(Long id) {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), CHECK_EXISTS_BY_ID_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(CHECK_EXISTS_BY_ID_QUERY,
 				(connection, statement) -> {
 					statement.setLong(1, id);
 					return DatabaseUtils
@@ -84,7 +83,7 @@ public class UserModel {
 	private static final String FIND_BY_ID_QUERY = "SELECT * FROM USER WHERE ID = ?";
 
 	public static Optional<UserModel> findById(Long id) {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), FIND_BY_ID_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(FIND_BY_ID_QUERY,
 				(connection, statement) -> {
 					statement.setLong(1, id);
 					return DatabaseUtils.parseResultSetSingleRow(statement.executeQuery(), new UserModelRowParser());
@@ -105,7 +104,7 @@ public class UserModel {
 	// @formatter:on
 
 	public static List<UserModel> findByPhoneOrUsername(String sstr, Pagination pagination) {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), FIND_BY_PHONE_OR_USERNAME_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(FIND_BY_PHONE_OR_USERNAME_QUERY,
 				(connection, statement) -> {
 					statement.setString(1, sstr);
 					statement.setString(2, sstr);
@@ -127,7 +126,7 @@ public class UserModel {
 	// @formatter:on
 
 	public static Long countByPhoneOrUsername(String sstr) {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), COUNT_BY_PHONE_OR_USERNAME_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(COUNT_BY_PHONE_OR_USERNAME_QUERY,
 				(connection, statement) -> {
 					statement.setString(1, sstr);
 					statement.setString(2, sstr);
@@ -173,7 +172,7 @@ public class UserModel {
 	private static final String CHECK_EXISTS_WITH_PHONE_QUERY = "SELECT COUNT(*) > 0 FROM USER WHERE PHONE = ?";
 
 	private boolean existsWithThePhone() {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), CHECK_EXISTS_WITH_PHONE_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(CHECK_EXISTS_WITH_PHONE_QUERY,
 				(connection, statement) -> {
 					statement.setString(1, getPhone());
 					return DatabaseUtils
@@ -185,7 +184,7 @@ public class UserModel {
 	private static final String CHECK_EXISTS_WITH_NICKNAME_QUERY = "SELECT COUNT(*) > 0 FROM USER WHERE USERNAME = ?";
 
 	private boolean existsWithTheNickname() {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), CHECK_EXISTS_WITH_NICKNAME_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(CHECK_EXISTS_WITH_NICKNAME_QUERY,
 				(connection, statement) -> {
 					statement.setString(1, getPublicName());
 					return DatabaseUtils
@@ -197,7 +196,7 @@ public class UserModel {
 	private static final String INSERT_TO_USER_TABLE_QUERY = "INSERT INTO USER(PHONE, PASSWORD, USERNAME, AVATAR_HREF) VALUES(?,?,?,?)";
 
 	private Long insertToUserTable() {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), INSERT_TO_USER_TABLE_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(INSERT_TO_USER_TABLE_QUERY,
 				(connection, statement) -> {
 					connection.setAutoCommit(false);
 					statement.setString(1, getPhone());
@@ -214,7 +213,7 @@ public class UserModel {
 	private static final String UPDATE_INTO_USER_TABLE_QUERY = "UPDATE USER SET PHONE=?, PASSWORD=?, USERNAME=?, AVATAR_HREF=? WHERE ID=?";
 
 	private UserModel updateIntoUserTable() {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), UPDATE_INTO_USER_TABLE_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(UPDATE_INTO_USER_TABLE_QUERY,
 				(connection, statement) -> {
 					connection.setAutoCommit(false);
 					statement.setString(1, getPhone());

@@ -9,7 +9,6 @@ import javax.ws.rs.core.HttpHeaders;
 import org.github.dmikhaylenko.errors.AuthenticationException;
 import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RowParsers;
-import org.github.dmikhaylenko.utils.Resources;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +37,7 @@ public class AuthTokenModel {
 	private static final String CALL_LOGOUT_PROCEDURE = "{CALL LOGOUT(?)}";
 
 	public void logout() {
-		DatabaseUtils.executeWithCallStatement(Resources.getChatDb(), CALL_LOGOUT_PROCEDURE,
+		DatabaseUtils.executeWithCallStatement(CALL_LOGOUT_PROCEDURE,
 				(connection, statement) -> {
 					connection.setAutoCommit(false);
 					statement.setString(1, getToken());
@@ -51,7 +50,7 @@ public class AuthTokenModel {
 	private static final String GET_AUTHENTICATED_USER_QUERY = "SELECT USER_ID FROM AUTH WHERE TOKEN = ?";
 
 	public Long getAuthenticatedUser() {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), GET_AUTHENTICATED_USER_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(GET_AUTHENTICATED_USER_QUERY,
 				(connection, statement) -> {
 					statement.setString(1, getToken());
 					return DatabaseUtils
@@ -67,7 +66,7 @@ public class AuthTokenModel {
 	private static final String CHECK_AUTHENTICATED_QUERY = "SELECT AUTHENTICATE(?) FROM DUAL";
 
 	private boolean isAuthenticated() {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), CHECK_AUTHENTICATED_QUERY,
+		return DatabaseUtils.executeWithPreparedStatement(CHECK_AUTHENTICATED_QUERY,
 				(connection, statement) -> {
 					statement.setString(1, getToken());
 					return DatabaseUtils

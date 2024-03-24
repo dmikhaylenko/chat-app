@@ -17,14 +17,20 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class DatabaseUtils {
+	private DataSource chatDb = null;
+	
+	public void initialize(DataSource chatDb) {
+		DatabaseUtils.chatDb = chatDb;
+	}
+	
 	public Optional<Long> lastInsertedId(Connection connection) {
 		return executeWithPreparedStatement(connection, "SELECT LAST_INSERT_ID() FROM DUAL", (conn, statement) -> {
 			return parseResultSetSingleRow(statement.executeQuery(), RowParsers.longValueRowMapper());
 		});
 	}
 
-	public <T> T executeWithPreparedStatement(DataSource dataSource, String sql, PreparedStatementExecutor<T> fn) {
-		return executeWithConnection(dataSource, connection -> {
+	public <T> T executeWithPreparedStatement(String sql, PreparedStatementExecutor<T> fn) {
+		return executeWithConnection(chatDb, connection -> {
 			return executeWithPreparedStatement(connection, sql, fn);
 		});
 	}
@@ -37,8 +43,8 @@ public class DatabaseUtils {
 		}
 	}
 
-	public <T> T executeWithCallStatement(DataSource data, String sql, CallStatementExecutor<T> fn) {
-		return executeWithConnection(data, connection -> {
+	public <T> T executeWithCallStatement(String sql, CallStatementExecutor<T> fn) {
+		return executeWithConnection(chatDb, connection -> {
 			return executeWithCallStatement(connection, sql, fn);
 		});
 	}

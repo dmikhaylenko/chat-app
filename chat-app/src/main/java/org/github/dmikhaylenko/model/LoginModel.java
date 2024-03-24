@@ -10,7 +10,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.github.dmikhaylenko.errors.WrongLoginOrPasswordException;
 import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RowParsers;
-import org.github.dmikhaylenko.utils.Resources;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,7 +35,7 @@ public class LoginModel {
 	}
 	
 	private Optional<String> executeLogin() {
-		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), CALL_LOGIN_QUERY, (connection, statement) -> {
+		return DatabaseUtils.executeWithPreparedStatement(CALL_LOGIN_QUERY, (connection, statement) -> {
 			statement.setString(1, getUsername());
 			statement.setString(2, getPassword());
 			return DatabaseUtils.parseResultSetSingleRow(statement.executeQuery(), RowParsers.stringValueRowMapper());
