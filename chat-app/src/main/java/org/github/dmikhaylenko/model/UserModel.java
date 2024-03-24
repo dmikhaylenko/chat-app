@@ -17,17 +17,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.github.dmikhaylenko.adapters.JaxbLocalDateTimeAdapter;
+import org.github.dmikhaylenko.errors.MissingRequestedUserException;
+import org.github.dmikhaylenko.errors.UserWithNickNameExistsException;
+import org.github.dmikhaylenko.errors.UserWithPhoneExistsException;
 import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RsRowParser;
-import org.github.dmikhaylenko.utils.PageUtils;
 import org.github.dmikhaylenko.utils.Resources;
 import org.github.dmikhaylenko.utils.TimeUtils;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-@Data
+@Getter
+@ToString
+@SuperBuilder
 @XmlRootElement
+@NoArgsConstructor
+@EqualsAndHashCode
 @XmlAccessorType(XmlAccessType.FIELD)
 public class UserModel {
 	@XmlElement
@@ -58,7 +68,7 @@ public class UserModel {
 	@XmlElement
 	@XmlJavaTypeAdapter(value = JaxbLocalDateTimeAdapter.class)
 	private LocalDateTime lastAuth;
-
+	
 	private static final String CHECK_EXISTS_BY_ID_QUERY = "SELECT COUNT(*) > 0 FROM USER WHERE ID = ?";
 
 	public static boolean existsById(Long id) {
@@ -94,14 +104,13 @@ public class UserModel {
 			+ "OFFSET ?";
 	// @formatter:on
 
-	public static List<UserModel> findByPhoneOrUsername(String sstr, Long pg, Long ps) {
-		Long offset = PageUtils.calculateOffset(pg, ps);
+	public static List<UserModel> findByPhoneOrUsername(String sstr, Pagination pagination) {
 		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), FIND_BY_PHONE_OR_USERNAME_QUERY,
 				(connection, statement) -> {
 					statement.setString(1, sstr);
 					statement.setString(2, sstr);
-					statement.setLong(3, ps);
-					statement.setLong(4, offset);
+					statement.setLong(3, pagination.getPageSize());
+					statement.setLong(4, pagination.getOffset());
 					return DatabaseUtils.parseResultSet(statement.executeQuery(), new UserModelRowParser());
 				});
 	}
@@ -127,9 +136,43 @@ public class UserModel {
 				});
 	}
 
+	public static void checkThatRequestedUserExits(Long userId) {
+		if (!UserModel.existsById(userId)) {
+			throw new MissingRequestedUserException();
+		}
+	}
+	
+	public Long registerUser() {
+		checkThatUserWithPhoneExists();
+		checkThatUserWithNickNameExists();
+		return insertToUserTable();
+	}
+	
+	public void changePassword(String password) {
+		this.password = password;
+		updateIntoUserTable();
+	}
+	
+	
+	
+	
+	
+	
+	private void checkThatUserWithPhoneExists() {
+		if (existsWithThePhone()) {
+			throw new UserWithPhoneExistsException();
+		}
+	}
+	
+	private void checkThatUserWithNickNameExists() {
+		if (existsWithTheNickname()) {
+			throw new UserWithNickNameExistsException();
+		}
+	}
+	
 	private static final String CHECK_EXISTS_WITH_PHONE_QUERY = "SELECT COUNT(*) > 0 FROM USER WHERE PHONE = ?";
 
-	public boolean existsWithThePhone() {
+	private boolean existsWithThePhone() {
 		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), CHECK_EXISTS_WITH_PHONE_QUERY,
 				(connection, statement) -> {
 					statement.setString(1, getPhone());
@@ -141,7 +184,7 @@ public class UserModel {
 
 	private static final String CHECK_EXISTS_WITH_NICKNAME_QUERY = "SELECT COUNT(*) > 0 FROM USER WHERE USERNAME = ?";
 
-	public boolean existsWithTheNickname() {
+	private boolean existsWithTheNickname() {
 		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), CHECK_EXISTS_WITH_NICKNAME_QUERY,
 				(connection, statement) -> {
 					statement.setString(1, getPublicName());
@@ -153,7 +196,7 @@ public class UserModel {
 
 	private static final String INSERT_TO_USER_TABLE_QUERY = "INSERT INTO USER(PHONE, PASSWORD, USERNAME, AVATAR_HREF) VALUES(?,?,?,?)";
 
-	public Long insertToUserTable() {
+	private Long insertToUserTable() {
 		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), INSERT_TO_USER_TABLE_QUERY,
 				(connection, statement) -> {
 					connection.setAutoCommit(false);
@@ -170,7 +213,7 @@ public class UserModel {
 
 	private static final String UPDATE_INTO_USER_TABLE_QUERY = "UPDATE USER SET PHONE=?, PASSWORD=?, USERNAME=?, AVATAR_HREF=? WHERE ID=?";
 
-	public UserModel updateIntoUserTable() {
+	private UserModel updateIntoUserTable() {
 		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), UPDATE_INTO_USER_TABLE_QUERY,
 				(connection, statement) -> {
 					connection.setAutoCommit(false);
@@ -188,14 +231,16 @@ public class UserModel {
 	private static class UserModelRowParser implements RsRowParser<UserModel> {
 		@Override
 		public UserModel parseRow(ResultSet resultSet) throws SQLException {
-			UserModel model = new UserModel();
-			model.setId(resultSet.getLong("ID"));
-			model.setAvatar(resultSet.getString("AVATAR_HREF"));
-			model.setPhone(resultSet.getString("PHONE"));
-			model.setPassword(resultSet.getString("PASSWORD"));
-			model.setPublicName(resultSet.getString("USERNAME"));
-			model.setLastAuth(TimeUtils.createLocalDateTime(resultSet.getTimestamp("LAST_AUTH")));
-			return model;
+			// @formatter:off
+			return UserModel.builder()
+					.id(resultSet.getLong("ID"))
+					.avatar(resultSet.getString("AVATAR_HREF"))
+					.phone(resultSet.getString("PHONE"))
+					.password(resultSet.getString("PASSWORD"))
+					.publicName(resultSet.getString("USERNAME"))
+					.lastAuth(TimeUtils.createLocalDateTime(resultSet.getTimestamp("LAST_AUTH")))
+					.build();
+			// @formatter:on
 		}
 	}
 }

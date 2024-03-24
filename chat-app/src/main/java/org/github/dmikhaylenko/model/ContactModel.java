@@ -7,14 +7,24 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.github.dmikhaylenko.errors.ContactAlreadyExistsException;
+import org.github.dmikhaylenko.errors.MissingRequestedContactException;
 import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.utils.Resources;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-@Data
+@Getter
+@ToString
+@SuperBuilder
 @XmlRootElement
+@NoArgsConstructor
+@EqualsAndHashCode
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ContactModel {
 	@Null
@@ -24,10 +34,44 @@ public class ContactModel {
 	@NotNull
 	@XmlElement
 	private Long contactId;
-
+	
+	public ContactModel(AuthTokenModel authToken, Long contactId) {
+		super();
+		this.userId = authToken.getAuthenticatedUser();
+		this.contactId = contactId;
+	}
+	
 	private static String CHECK_CONTACT_EXISTS_QUERY = "SELECT COUNT(*) > 0 FROM CONTACT WHERE WHOSE_ID = ? AND WHO_ID = ?";
 
-	public boolean existsIntoContactTable() {
+	public void addContact(AuthTokenModel authToken) {
+		this.userId = authToken.getAuthenticatedUser();
+		checkThatRequestedUserExits();
+		checkThatContactDoesNotExistIntoTable();
+		insertIntoContactTable();
+	}
+	
+	public void deleteContact() {
+		checkThatContactExistsIntoTable();
+		deleteFromContactTable();
+	}
+	
+	private void checkThatRequestedUserExits() {
+		UserModel.checkThatRequestedUserExits(getContactId());
+	}
+
+	private void checkThatContactDoesNotExistIntoTable() {
+		if (existsIntoContactTable()) {
+			throw new ContactAlreadyExistsException();
+		}
+	}
+
+	private void checkThatContactExistsIntoTable() {
+		if (!existsIntoContactTable()) {
+			throw new MissingRequestedContactException();
+		}
+	}
+	
+	private boolean existsIntoContactTable() {
 		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), CHECK_CONTACT_EXISTS_QUERY,
 				(connection, statement) -> {
 					statement.setLong(1, userId);
@@ -40,7 +84,7 @@ public class ContactModel {
 
 	private static String INSERT_INTO_CONTACT_TABLE_QUERY = "INSERT INTO CONTACT(WHOSE_ID, WHO_ID) VALUES (?, ?)";
 
-	public void insertIntoContactTable() {
+	private void insertIntoContactTable() {
 		DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), INSERT_INTO_CONTACT_TABLE_QUERY,
 				(connection, statement) -> {
 					statement.setLong(1, userId);
@@ -52,7 +96,7 @@ public class ContactModel {
 
 	private static String DELETE_FROM_TABLE_QUERY = "DELETE FROM CONTACT WHERE WHOSE_ID = ? AND WHO_ID = ?";
 
-	public void deleteFromContactTable() {
+	private void deleteFromContactTable() {
 		DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), DELETE_FROM_TABLE_QUERY,
 				(connection, statement) -> {
 					statement.setLong(1, userId);
