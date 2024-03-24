@@ -5,6 +5,8 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
+import org.github.dmikhaylenko.errors.ValidationException;
+
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -13,7 +15,7 @@ public class ValidationUtils {
 		Validator validator = Resources.getValidator();
 		Set<ConstraintViolation<T>> violations = validator.validate(validatable);
 		if (!violations.isEmpty()) {
-			throw ExceptionUtils.createValidationErrorException();
+			throw new ValidationException();
 		}
 	}
 }

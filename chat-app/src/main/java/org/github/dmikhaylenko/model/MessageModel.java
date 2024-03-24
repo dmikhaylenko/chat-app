@@ -13,15 +13,26 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.github.dmikhaylenko.errors.ItIsForbiddenToDeleteForeignUsersMessagesException;
+import org.github.dmikhaylenko.errors.ItIsForbiddenToEditForeignUsersMessagesException;
+import org.github.dmikhaylenko.errors.MissingRequestedMessageException;
 import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RsRowParser;
 import org.github.dmikhaylenko.utils.Resources;
 import org.github.dmikhaylenko.utils.TimeUtils;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-@Data
+@Getter
+@ToString
+@SuperBuilder
 @XmlRootElement
+@EqualsAndHashCode
+@NoArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MessageModel {
 	@Null
@@ -49,18 +60,52 @@ public class MessageModel {
 	@XmlElement
 	private LocalDateTime posted;
 
+	public static MessageModel getById(Long id) {
+		return findById(id).orElseThrow(MissingRequestedMessageException::new);
+	}
+
+	public Long writeMessage(AuthTokenModel authToken, Long userId) {
+		UserModel.checkThatRequestedUserExits(userId);
+		this.srcId = authToken.getAuthenticatedUser();
+		this.destId = userId;
+		return insertIntoMessageTable();
+	}
+
+	public void editMessage(AuthTokenModel authToken, EditMessageModel command) {
+		checkMessageEditingAvailabilityForUser(authToken.getAuthenticatedUser());
+		this.messageText = command.getMessageText();
+		updateIntoMessageTable();
+	}
+
+	public void deleteMessage(AuthTokenModel authToken) {
+		checkMessageDeleteAvailabilityForUser(authToken.getAuthenticatedUser());
+		deleteFromMessageTable();
+	}
+
+	private void checkMessageEditingAvailabilityForUser(Long userId) {
+		if (!userId.equals(getSrcId())) {
+			throw new ItIsForbiddenToEditForeignUsersMessagesException();
+		}
+	}
+
+	private void checkMessageDeleteAvailabilityForUser(Long userId) {
+		if (!userId.equals(getSrcId())) {
+			throw new ItIsForbiddenToDeleteForeignUsersMessagesException();
+		}
+	}
+	
 	// @formatter:off
 	private static final String FIND_MESSAGE_BY_ID_QUERY = "SELECT * FROM MESSAGE WHERE ID = ?";
 	// @formatter:on
 
-	public static Optional<MessageModel> findById(Long id) {
+	private static Optional<MessageModel> findById(Long id) {
 		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), FIND_MESSAGE_BY_ID_QUERY,
 				(connection, statement) -> {
 					statement.setLong(1, id);
 					return DatabaseUtils.parseResultSetSingleRow(statement.executeQuery(), new MessageModelRowParser());
 				});
 	}
-
+	
 	// @formatter:off
 	private static final String INSERT_MESSAGE_QUERY = "INSERT INTO \r\n"
 			+ "    MESSAGE(SRC_ID, DEST_ID, MESSAGE) \r\n"
@@ -68,7 +113,7 @@ public class MessageModel {
 			+ "    (?, ?, ?)";
 	// @formatter:on
 
-	public Long insertIntoMessageTable() {
+	private Long insertIntoMessageTable() {
 		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), INSERT_MESSAGE_QUERY,
 				(connection, statement) -> {
 					connection.setAutoCommit(false);
@@ -95,7 +140,7 @@ public class MessageModel {
 			+ "    ID = ?";
 	// @formatter:on
 
-	public void updateIntoMessageTable() {
+	private void updateIntoMessageTable() {
 		DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), UPDATE_MESSAGE_QUERY,
 				(connection, statement) -> {
 					connection.setAutoCommit(false);
@@ -115,7 +160,7 @@ public class MessageModel {
 	private static final String DELETE_MESSAGE_QUERY = "DELETE FROM MESSAGE WHERE ID = ?";
 	// @formatter:on
 
-	public void deleteFromMessageTable() {
+	private void deleteFromMessageTable() {
 		DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), DELETE_MESSAGE_QUERY,
 				(connection, statement) -> {
 					connection.setAutoCommit(false);
@@ -127,16 +172,18 @@ public class MessageModel {
 	}
 
 	private static class MessageModelRowParser implements RsRowParser<MessageModel> {
+		// @formatter:off
 		@Override
 		public MessageModel parseRow(ResultSet resultSet) throws SQLException {
-			MessageModel result = new MessageModel();
-			result.setId(resultSet.getLong("ID"));
-			result.setSrcId(resultSet.getLong("SRC_ID"));
-			result.setDestId(resultSet.getLong("DEST_ID"));
-			result.setMessageText(resultSet.getString("MESSAGE"));
-			result.setWatched(resultSet.getBoolean("WATCHED"));
-			result.setPosted(TimeUtils.createLocalDateTime(resultSet.getTimestamp("POSTED")));
-			return result;
+			return MessageModel.builder()
+					.id(resultSet.getLong("ID"))
+					.srcId(resultSet.getLong("SRC_ID"))
+					.destId(resultSet.getLong("DEST_ID"))
+					.messageText(resultSet.getString("MESSAGE"))
+					.watched(resultSet.getBoolean("WATCHED"))
+					.posted(TimeUtils.createLocalDateTime(resultSet.getTimestamp("POSTED")))
+					.build();
 		}
+		// @formatter:on
 	}
 }

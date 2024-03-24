@@ -6,4 +6,8 @@ public class CheckedExceptionWrapper extends RuntimeException {
 	public CheckedExceptionWrapper(Exception cause) {
 		super(cause);
 	}
+	
+	public static CheckedExceptionWrapper uncheckedOf(Exception error) {
+		return new CheckedExceptionWrapper(error);
+	}
 }

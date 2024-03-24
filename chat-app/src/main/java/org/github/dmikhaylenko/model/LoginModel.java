@@ -7,14 +7,21 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.github.dmikhaylenko.errors.WrongLoginOrPasswordException;
 import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.utils.Resources;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@Data
+@Getter
+@ToString
 @XmlRootElement
+@NoArgsConstructor
+@EqualsAndHashCode
 @XmlAccessorType(XmlAccessType.FIELD)
 public class LoginModel {
 	@XmlElement
@@ -24,7 +31,11 @@ public class LoginModel {
 	
 	private static final String CALL_LOGIN_QUERY = "SELECT LOGIN(?, ?) AS TOKEN FROM DUAL";
 	
-	public Optional<String> executeLogin() {
+	public String login() {
+		return executeLogin().orElseThrow(WrongLoginOrPasswordException::new);
+	}
+	
+	private Optional<String> executeLogin() {
 		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), CALL_LOGIN_QUERY, (connection, statement) -> {
 			statement.setString(1, getUsername());
 			statement.setString(2, getPassword());

@@ -7,38 +7,30 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
+import org.github.dmikhaylenko.model.AddContactResponse;
 import org.github.dmikhaylenko.model.AuthTokenModel;
 import org.github.dmikhaylenko.model.ContactModel;
-import org.github.dmikhaylenko.model.ResponseModel;
-import org.github.dmikhaylenko.utils.AuthUtils;
-import org.github.dmikhaylenko.utils.ContactUtils;
-import org.github.dmikhaylenko.utils.ResponseUtils;
+import org.github.dmikhaylenko.model.DeleteContactResponse;
 import org.github.dmikhaylenko.utils.ValidationUtils;
 
 @Path("/contacts")
 public class ContactController {
 	@POST
-	public ResponseModel addContact(@Context HttpHeaders headers, ContactModel contact) {
+	public AddContactResponse addContact(@Context HttpHeaders headers, ContactModel contact) {
 		ValidationUtils.checkConstraints(contact);
-		AuthTokenModel authToken = AuthUtils.getTokenFromHeader(headers);
-		AuthUtils.checkThatAuthenticated(authToken);
-		contact.setUserId(authToken.getAuthenticatedUser());
-		ContactUtils.checkThatRequestedUserExits(contact);
-		ContactUtils.checkThatContactDoesNotExistIntoTable(contact);
-		contact.insertIntoContactTable();
-		return ResponseUtils.createAddContactResponse();
+		AuthTokenModel authToken = AuthTokenModel.getTokenFromHeader(headers);
+		authToken.checkThatAuthenticated();
+		contact.addContact(authToken);
+		return new AddContactResponse();
 	}
 
 	@DELETE
 	@Path("/{contactId}")
-	public ResponseModel deleteContact(@Context HttpHeaders headers, @PathParam("contactId") Long contactId) {
-		AuthTokenModel authToken = AuthUtils.getTokenFromHeader(headers);
-		AuthUtils.checkThatAuthenticated(authToken);
-		ContactModel contact = new ContactModel();
-		contact.setUserId(authToken.getAuthenticatedUser());
-		contact.setContactId(contactId);
-		ContactUtils.checkThatContactExistsIntoTable(contact);
-		contact.deleteFromContactTable();
-		return ResponseUtils.createDeleteContactResponse();
+	public DeleteContactResponse deleteContact(@Context HttpHeaders headers, @PathParam("contactId") Long contactId) {
+		AuthTokenModel authToken = AuthTokenModel.getTokenFromHeader(headers);
+		authToken.checkThatAuthenticated();
+		ContactModel contact = new ContactModel(authToken, contactId);
+		contact.deleteContact();
+		return new DeleteContactResponse();
 	}
 }

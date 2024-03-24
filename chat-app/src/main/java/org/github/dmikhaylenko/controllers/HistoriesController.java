@@ -12,15 +12,17 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
 import org.github.dmikhaylenko.model.AuthTokenModel;
+import org.github.dmikhaylenko.model.ClearHistoryResponse;
 import org.github.dmikhaylenko.model.HistoryModel;
 import org.github.dmikhaylenko.model.MessageModel;
 import org.github.dmikhaylenko.model.MessageViewModel;
+import org.github.dmikhaylenko.model.Pagination;
+import org.github.dmikhaylenko.model.PostMessageResponse;
 import org.github.dmikhaylenko.model.ResponseModel;
-import org.github.dmikhaylenko.utils.AuthUtils;
-import org.github.dmikhaylenko.utils.PageUtils;
-import org.github.dmikhaylenko.utils.ResponseUtils;
+import org.github.dmikhaylenko.model.SearchHistoriesResponse;
+import org.github.dmikhaylenko.model.ShowHistoryMessages;
+import org.github.dmikhaylenko.model.UserModel;
 import org.github.dmikhaylenko.utils.TimezoneUtils;
-import org.github.dmikhaylenko.utils.UserUtils;
 import org.github.dmikhaylenko.utils.ValidationUtils;
 
 @Path("/histories")
@@ -29,51 +31,49 @@ public class HistoriesController {
 	public ResponseModel searchHistories(@Context HttpHeaders headers, @QueryParam("pg") Long pg,
 			@QueryParam("ps") Long ps) {
 		TimezoneUtils.loadZoneOffset(headers);
-		AuthTokenModel token = AuthUtils.getTokenFromHeader(headers);
-		AuthUtils.checkThatAuthenticated(token);
-		Long page = PageUtils.normalizePage(pg);
-		Long pageSize = PageUtils.normalizePageSize(ps, 500, 500);
-		List<HistoryModel> histories = HistoryModel.findHistories(token, page, pageSize);
+		AuthTokenModel token = AuthTokenModel.getTokenFromHeader(headers);
+		token.checkThatAuthenticated();
+		Pagination pagination = Pagination.of(pg, ps).defaults(1, 500L, 50L);
+		List<HistoryModel> histories = HistoryModel.findHistories(token, pagination);
 		Long total = HistoryModel.countHistories(token);
 		Long totalUnwatched = HistoryModel.countUnwatchedHistories(token);
-		return ResponseUtils.createSearchHistoriesResponse(histories, total, totalUnwatched);
+		return new SearchHistoriesResponse(histories, total, totalUnwatched);
 	}
 
 	@POST
 	@Path("/{userId}")
-	public ResponseModel postMessage(@Context HttpHeaders headers, @PathParam("userId") Long userId,
+	public PostMessageResponse postMessage(@Context HttpHeaders headers, @PathParam("userId") Long userId,
 			MessageModel message) {
 		ValidationUtils.checkConstraints(message);
-		AuthTokenModel token = AuthUtils.getTokenFromHeader(headers);
-		AuthUtils.checkThatAuthenticated(token);
-		UserUtils.checkThatRequestedUserExits(userId);
-		message.setSrcId(token.getAuthenticatedUser());
-		message.setDestId(userId);
-		return ResponseUtils.createPostMessageResponse(message.insertIntoMessageTable());
+		AuthTokenModel token = AuthTokenModel.getTokenFromHeader(headers);
+		token.checkThatAuthenticated();
+		Long messageId = message.writeMessage(token, userId);
+		return new PostMessageResponse(messageId);
 	}
 
 	@DELETE
 	@Path("/{userId}")
-	public ResponseModel clearHistory(@Context HttpHeaders headers, @PathParam("userId") Long userId) {
-		AuthTokenModel token = AuthUtils.getTokenFromHeader(headers);
-		AuthUtils.checkThatAuthenticated(token);
-		UserUtils.checkThatRequestedUserExits(userId);
+	public ClearHistoryResponse clearHistory(@Context HttpHeaders headers, @PathParam("userId") Long userId) {
+		AuthTokenModel token = AuthTokenModel.getTokenFromHeader(headers);
+		token.checkThatAuthenticated();
+		UserModel.checkThatRequestedUserExits(userId);
 		HistoryModel.clearAllMessages(token.getAuthenticatedUser(), userId);
-		return ResponseUtils.createClearHistoryResponse();
+		return new ClearHistoryResponse();
 	}
 
 	@GET
 	@Path("/{userId}/messages")
-	public ResponseModel showHistory(@Context HttpHeaders headers, @PathParam("userId") Long userId,
+	public ShowHistoryMessages showHistory(@Context HttpHeaders headers, @PathParam("userId") Long userId,
 			@QueryParam("pg") Long pg, @QueryParam("ps") Long ps) {
-		AuthTokenModel token = AuthUtils.getTokenFromHeader(headers);
-		AuthUtils.checkThatAuthenticated(token);
-		UserUtils.checkThatRequestedUserExits(userId);
+		AuthTokenModel token = AuthTokenModel.getTokenFromHeader(headers);
+		token.checkThatAuthenticated();
+		UserModel.checkThatRequestedUserExits(userId);
 		Long currentUserId = token.getAuthenticatedUser();
-		Long pageSize = PageUtils.normalizePageSize(ps, 500, 500);
-		Long pageNumber = PageUtils.normalizePage(pg, MessageViewModel.getLastPage(currentUserId, pageSize));
+		Pagination pagination = Pagination.of(pg, ps).pageSizeDefaults(500, 50).defaultPageNumber((currentPageNumber, currentPageSize) -> {
+			return MessageViewModel.getLastPage(currentUserId, currentPageSize.getPageSize());
+		});
 		Long total = MessageViewModel.getTotalMessages(userId, currentUserId);
-		List<MessageViewModel> messages = MessageViewModel.findMessages(userId, currentUserId, pageNumber, pageSize);
-		return ResponseUtils.createShowHistoryMessages(pageNumber, total, messages);
+		List<MessageViewModel> messages = MessageViewModel.findMessages(userId, currentUserId, pagination);
+		return new ShowHistoryMessages(pagination.getPageNumber(), total, messages);
 	}
 }

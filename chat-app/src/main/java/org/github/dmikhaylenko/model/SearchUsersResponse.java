@@ -8,17 +8,21 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@Data
+@Getter
 @XmlRootElement
 @NoArgsConstructor
+@AllArgsConstructor
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SearchUsersResponse")
-public class SearchUsersResponse extends ResponseModel {
+public class SearchUsersResponse extends SuccessResponse {
 	@XmlElement
 	private List<UserModel> users;
 
