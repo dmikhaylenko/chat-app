@@ -11,9 +11,9 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 import javax.validation.Validator;
 
-import org.github.dmikhaylenko.utils.DatabaseUtils;
-import org.github.dmikhaylenko.utils.TimezoneUtils;
-import org.github.dmikhaylenko.utils.ValidationUtils;
+import org.github.dmikhaylenko.commons.DatabaseUtils;
+import org.github.dmikhaylenko.commons.time.TimezoneUtils;
+import org.github.dmikhaylenko.commons.validation.ValidationUtils;
 
 @ApplicationScoped
 public class ResourcesConfig {

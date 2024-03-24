@@ -6,6 +6,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
+import org.github.dmikhaylenko.modules.contacts.AddContactResponse;
+import org.github.dmikhaylenko.modules.contacts.DeleteContactResponse;
+import org.github.dmikhaylenko.modules.history.ClearHistoryResponse;
+import org.github.dmikhaylenko.modules.history.PostMessageResponse;
+import org.github.dmikhaylenko.modules.history.SearchHistoriesResponse;
+import org.github.dmikhaylenko.modules.history.ShowHistoryMessages;
+import org.github.dmikhaylenko.modules.messages.DeleteMessageResponse;
+import org.github.dmikhaylenko.modules.messages.EditMessageResponse;
+import org.github.dmikhaylenko.modules.users.ChangePasswordResponse;
+import org.github.dmikhaylenko.modules.users.LoginResponse;
+import org.github.dmikhaylenko.modules.users.LogoutResponse;
+import org.github.dmikhaylenko.modules.users.RegisterUserResponse;
+import org.github.dmikhaylenko.modules.users.SearchUsersResponse;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
