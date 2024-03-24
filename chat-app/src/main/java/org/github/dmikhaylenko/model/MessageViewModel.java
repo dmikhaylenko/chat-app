@@ -11,16 +11,23 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.github.dmikhaylenko.utils.DatabaseUtils;
-import org.github.dmikhaylenko.utils.Resources;
-import org.github.dmikhaylenko.utils.TimeUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RsRowParser;
-import org.github.dmikhaylenko.utils.PageUtils;
+import org.github.dmikhaylenko.utils.Resources;
+import org.github.dmikhaylenko.utils.TimeUtils;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-@Data
+@Getter
+@ToString
+@SuperBuilder
 @XmlRootElement
+@EqualsAndHashCode
+@NoArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MessageViewModel {
 	@XmlElement
@@ -76,14 +83,13 @@ public class MessageViewModel {
 			+ "OFFSET ?";
 	// @formatter:on
 
-	public static List<MessageViewModel> findMessages(Long userId, Long currentUserId, Long pg, Long ps) {
-		Long offset = PageUtils.calculateOffset(pg, ps);
+	public static List<MessageViewModel> findMessages(Long userId, Long currentUserId, Pagination pagination) {
 		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), FIND_MESSAGES_QUERY,
 				(connection, statement) -> {
 					statement.setLong(1, userId);
 					statement.setLong(2, currentUserId);
-					statement.setLong(3, ps);
-					statement.setLong(4, offset);
+					statement.setLong(3, pagination.getPageSize());
+					statement.setLong(4, pagination.getOffset());
 					return DatabaseUtils.parseResultSet(statement.executeQuery(), new MessageViewModelRowParser());
 				});
 	}
@@ -111,18 +117,21 @@ public class MessageViewModel {
 	}
 
 	private static final class MessageViewModelRowParser implements RsRowParser<MessageViewModel> {
+		// @formatter:off
 		@Override
 		public MessageViewModel parseRow(ResultSet resultSet) throws SQLException {
-			MessageViewModel result = new MessageViewModel();
-			UserModel author = new UserModel();
-			result.setAuthor(author);
-			result.setId(resultSet.getLong("ID"));
-			author.setPublicName(resultSet.getString("AUTHOR_NAME"));
-			author.setAvatar(resultSet.getString("AUTHOR_AVATAR"));
-			result.setMessage(resultSet.getString("MESSAGE"));
-			result.setWatched(resultSet.getBoolean("WATCHED"));
-			result.setPosted(TimeUtils.createLocalDateTime(resultSet.getTimestamp("POSTED")));
-			return result;
+			UserModel author = UserModel.builder()
+					.publicName(resultSet.getString("AUTHOR_NAME"))
+					.avatar(resultSet.getString("AUTHOR_AVATAR"))
+					.build();
+			return MessageViewModel.builder()
+					.author(author)
+					.id(resultSet.getLong("ID"))
+					.message(resultSet.getString("MESSAGE"))
+					.watched(resultSet.getBoolean("WATCHED"))
+					.posted(TimeUtils.createLocalDateTime(resultSet.getTimestamp("POSTED")))
+					.build();
 		}
+		// @formatter:on
 	}
 }

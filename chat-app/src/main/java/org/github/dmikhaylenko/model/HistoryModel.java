@@ -15,14 +15,21 @@ import org.github.dmikhaylenko.adapters.JaxbLocalDateTimeAdapter;
 import org.github.dmikhaylenko.utils.DatabaseUtils;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.utils.DatabaseUtils.RsRowParser;
-import org.github.dmikhaylenko.utils.PageUtils;
 import org.github.dmikhaylenko.utils.Resources;
 import org.github.dmikhaylenko.utils.TimeUtils;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-@Data
+@Getter
+@ToString
+@SuperBuilder
 @XmlRootElement
+@NoArgsConstructor
+@EqualsAndHashCode
 @XmlAccessorType(XmlAccessType.FIELD)
 public class HistoryModel {
 	@XmlElement
@@ -60,13 +67,12 @@ public class HistoryModel {
 			+ "OFFSET ?";
 	// @formatter:on
 
-	public static List<HistoryModel> findHistories(AuthTokenModel token, Long pg, Long ps) {
-		Long offset = PageUtils.calculateOffset(pg, ps);
+	public static List<HistoryModel> findHistories(AuthTokenModel token, Pagination pagination) {
 		return DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), FIND_HISTORIES_QUERY,
 				(connection, statement) -> {
 					statement.setString(1, token.getToken());
-					statement.setLong(2, ps);
-					statement.setLong(3, offset);
+					statement.setLong(2, pagination.getPageSize());
+					statement.setLong(3, pagination.getOffset());
 					return DatabaseUtils.parseResultSet(statement.executeQuery(), new HistoryModelRowParser());
 				});
 	}
@@ -120,7 +126,7 @@ public class HistoryModel {
 			+ "    (SRC_ID = ? AND DEST_ID = ?) OR\r\n"
 			+ "    (SRC_ID = ? AND DEST_ID = ?)";
 	// @formatter:on
-	
+
 	public static void clearAllMessages(Long currentUserId, Long userId) {
 		DatabaseUtils.executeWithPreparedStatement(Resources.getChatDb(), CLEAR_ALL_MESSAGES_QUERY,
 				(connection, statement) -> {
@@ -134,17 +140,18 @@ public class HistoryModel {
 	}
 
 	private static class HistoryModelRowParser implements RsRowParser<HistoryModel> {
+		// @formatter:off
 		@Override
 		public HistoryModel parseRow(ResultSet resultSet) throws SQLException {
-			HistoryModel model = new HistoryModel();
-			model.setId(resultSet.getLong("ID"));
-			model.setPublicName(resultSet.getString("NAME"));
-			model.setAvatar(resultSet.getString("AVATAR_HREF"));
-			model.setLastAccess(TimeUtils.createLocalDateTime(resultSet.getTimestamp("LAST_AUTH")));
-			model.setOnline(resultSet.getBoolean("ONLINE"));
-			model.setUnwatched(resultSet.getLong("UNWATCHED"));
-			return model;
+			return HistoryModel.builder()
+					.id(resultSet.getLong("ID"))
+					.publicName(resultSet.getString("NAME"))
+					.avatar(resultSet.getString("AVATAR_HREF"))
+					.lastAccess(TimeUtils.createLocalDateTime(resultSet.getTimestamp("LAST_AUTH")))
+					.online(resultSet.getBoolean("ONLINE"))
+					.unwatched(resultSet.getLong("UNWATCHED"))
+					.build();
 		}
-
+		// @formatter:on
 	}
 }
