@@ -7,7 +7,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
-import org.github.dmikhaylenko.utils.I18nUtils;
+import org.github.dmikhaylenko.commons.i18n.I18nUtils;
+import org.github.dmikhaylenko.model.errors.ApplicationErrorResponse;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
