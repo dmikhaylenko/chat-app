@@ -1,6 +1,7 @@
-package org.github.dmikhaylenko.modules.users;
+package org.github.dmikhaylenko.model;
 
 import org.github.dmikhaylenko.dao.Dao;
+import org.github.dmikhaylenko.modules.login.LoginRequest;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.github.dmikhaylenko.dao.DBPaginate;
 import org.github.dmikhaylenko.model.AuthTokenModel;
+import org.github.dmikhaylenko.model.UserModel;
+import org.github.dmikhaylenko.model.UsersModel;
 
 public class SearchUsersOperation {
 	public SearchUsersResponse execute(AuthTokenModel token, SearchUserRequest request) {

@@ -18,7 +18,7 @@ import org.github.dmikhaylenko.commons.adapters.JaxbLocalDateTimeAdapter;
 import org.github.dmikhaylenko.commons.time.TimeUtils;
 import org.github.dmikhaylenko.dao.DBPaginate;
 import org.github.dmikhaylenko.model.AuthTokenModel;
-import org.github.dmikhaylenko.modules.users.UserIdModel;
+import org.github.dmikhaylenko.model.UserIdModel;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

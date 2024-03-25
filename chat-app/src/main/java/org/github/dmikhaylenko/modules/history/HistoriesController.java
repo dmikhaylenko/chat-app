@@ -15,10 +15,10 @@ import org.github.dmikhaylenko.commons.time.TimezoneUtils;
 import org.github.dmikhaylenko.dao.DBPaginate;
 import org.github.dmikhaylenko.model.AuthTokenModel;
 import org.github.dmikhaylenko.model.ResponseModel;
+import org.github.dmikhaylenko.model.UserIdModel;
 import org.github.dmikhaylenko.model.pagination.Pagination;
 import org.github.dmikhaylenko.model.validation.ValidationUtils;
 import org.github.dmikhaylenko.modules.messages.MessageModel;
-import org.github.dmikhaylenko.modules.users.UserIdModel;
 
 @Path("/histories")
 public class HistoriesController {

@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.github.dmikhaylenko.commons.DatabaseUtils;
 import org.github.dmikhaylenko.commons.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.model.AuthTokenModel;
-import org.github.dmikhaylenko.modules.users.UserIdModel;
+import org.github.dmikhaylenko.model.UserIdModel;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

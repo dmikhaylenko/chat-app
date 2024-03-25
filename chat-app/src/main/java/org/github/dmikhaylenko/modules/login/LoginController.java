@@ -1,4 +1,4 @@
-package org.github.dmikhaylenko.modules.users;
+package org.github.dmikhaylenko.modules.login;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;

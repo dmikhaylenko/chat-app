@@ -15,8 +15,8 @@ import org.github.dmikhaylenko.commons.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.commons.DatabaseUtils.RsRowParser;
 import org.github.dmikhaylenko.commons.time.TimeUtils;
 import org.github.dmikhaylenko.dao.DBPaginate;
-import org.github.dmikhaylenko.modules.users.UserIdModel;
-import org.github.dmikhaylenko.modules.users.UserModel;
+import org.github.dmikhaylenko.model.UserIdModel;
+import org.github.dmikhaylenko.model.UserModel;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

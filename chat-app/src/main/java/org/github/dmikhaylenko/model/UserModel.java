@@ -1,10 +1,11 @@
-package org.github.dmikhaylenko.modules.users;
+package org.github.dmikhaylenko.model;
 
 import java.time.LocalDateTime;
 
 import org.github.dmikhaylenko.commons.time.TimeUtils;
 import org.github.dmikhaylenko.dao.DBUser;
 import org.github.dmikhaylenko.dao.Dao;
+import org.github.dmikhaylenko.modules.users.RegisterUserRequest;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

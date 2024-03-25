@@ -3,6 +3,8 @@ package org.github.dmikhaylenko.modules.users;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.github.dmikhaylenko.model.UserModel;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

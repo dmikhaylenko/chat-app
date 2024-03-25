@@ -1,6 +1,7 @@
 package org.github.dmikhaylenko.modules.users;
 
 import org.github.dmikhaylenko.model.AuthTokenModel;
+import org.github.dmikhaylenko.model.ChangePasswordModel;
 import org.github.dmikhaylenko.model.validation.ValidationUtils;
 
 public class ChangePasswordOperation {

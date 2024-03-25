@@ -1,9 +1,9 @@
-package org.github.dmikhaylenko.modules.users;
+package org.github.dmikhaylenko.model;
 
 import java.util.Objects;
 
 import org.github.dmikhaylenko.dao.Dao;
-import org.github.dmikhaylenko.model.AuthTokenModel;
+import org.github.dmikhaylenko.modules.users.ChangePasswordRequest;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

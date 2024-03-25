@@ -1,5 +1,6 @@
 package org.github.dmikhaylenko.modules.users;
 
+import org.github.dmikhaylenko.model.UserModel;
 import org.github.dmikhaylenko.model.validation.ValidationUtils;
 
 public class RegisterUserOperation {

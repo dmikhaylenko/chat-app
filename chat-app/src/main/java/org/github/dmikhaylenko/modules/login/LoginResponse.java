@@ -1,24 +1,28 @@
-package org.github.dmikhaylenko.modules.users;
+package org.github.dmikhaylenko.modules.login;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
+import org.github.dmikhaylenko.model.SuccessResponse;
+
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
-@ToString
 @XmlRootElement
 @NoArgsConstructor
-@EqualsAndHashCode
+@AllArgsConstructor
+@ToString(callSuper = true)
+@XmlType(name = "LoginResponse")
+@EqualsAndHashCode(callSuper = true)
 @XmlAccessorType(XmlAccessType.FIELD)
-public class LoginRequest {
+public class LoginResponse extends SuccessResponse {
 	@XmlElement
-	private String username;
-	@XmlElement
-	private String password;
+	private String token;
 }

@@ -12,11 +12,11 @@ import org.github.dmikhaylenko.modules.history.ClearHistoryResponse;
 import org.github.dmikhaylenko.modules.history.PostMessageResponse;
 import org.github.dmikhaylenko.modules.history.SearchHistoriesResponse;
 import org.github.dmikhaylenko.modules.history.ShowHistoryMessages;
+import org.github.dmikhaylenko.modules.login.LoginResponse;
+import org.github.dmikhaylenko.modules.login.LogoutResponse;
 import org.github.dmikhaylenko.modules.messages.DeleteMessageResponse;
 import org.github.dmikhaylenko.modules.messages.EditMessageResponse;
 import org.github.dmikhaylenko.modules.users.ChangePasswordResponse;
-import org.github.dmikhaylenko.modules.users.LoginResponse;
-import org.github.dmikhaylenko.modules.users.LogoutResponse;
 import org.github.dmikhaylenko.modules.users.RegisterUserResponse;
 import org.github.dmikhaylenko.modules.users.SearchUsersResponse;
 

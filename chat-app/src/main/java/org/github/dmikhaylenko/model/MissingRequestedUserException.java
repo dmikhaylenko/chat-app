@@ -1,4 +1,4 @@
-package org.github.dmikhaylenko.modules.users;
+package org.github.dmikhaylenko.model;
 
 import org.github.dmikhaylenko.model.errors.ApplicationException;
 
