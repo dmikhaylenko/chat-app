@@ -1,5 +1,6 @@
 package org.github.dmikhaylenko.modules.users;
 
+import org.github.dmikhaylenko.dao.DBPaginate;
 import org.github.dmikhaylenko.model.pagination.Pagination;
 
 import lombok.Getter;
@@ -12,7 +13,7 @@ public class SearchUserRequest {
 	private final Long pageNumber;
 	private final Long pageString;
 
-	public Pagination getPagination() {
+	public DBPaginate getPagination() {
 		return Pagination.of(pageNumber, pageString).defaults(1L, 1000L, 50L);
 	}
 }

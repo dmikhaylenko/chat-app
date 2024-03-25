@@ -2,8 +2,7 @@ package org.github.dmikhaylenko.modules.users;
 
 import java.util.Optional;
 
-import org.github.dmikhaylenko.commons.DatabaseUtils;
-import org.github.dmikhaylenko.commons.DatabaseUtils.RowParsers;
+import org.github.dmikhaylenko.dao.Dao;
 
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -25,28 +24,11 @@ public class UserIdModel {
 		}
 	}
 	
-	private static final String CHECK_EXISTS_BY_ID_QUERY = "SELECT COUNT(*) > 0 FROM USER WHERE ID = ?";
-	
 	public boolean existsById() {
-		return DatabaseUtils.executeWithPreparedStatement(CHECK_EXISTS_BY_ID_QUERY,
-				(connection, statement) -> {
-					statement.setLong(1, userId);
-					return DatabaseUtils
-							.parseResultSetSingleRow(statement.executeQuery(), RowParsers.booleanValueRowMapper())
-							.get();
-				});
+		return Dao.userDao().existsById(userId);
 	}
 	
-	
-	
-	private static final String FIND_BY_ID_QUERY = "SELECT * FROM USER WHERE ID = ?";
-
 	public Optional<UserModel> findById() {
-		return DatabaseUtils.executeWithPreparedStatement(FIND_BY_ID_QUERY,
-				(connection, statement) -> {
-					statement.setLong(1, userId);
-					return DatabaseUtils.parseResultSetSingleRow(statement.executeQuery(), new UserModelRowParser());
-				});
+		return Dao.userDao().findById(userId).map(UserModel::new);
 	}
-
 }

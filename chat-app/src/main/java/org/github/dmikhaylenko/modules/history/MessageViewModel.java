@@ -14,7 +14,7 @@ import org.github.dmikhaylenko.commons.DatabaseUtils;
 import org.github.dmikhaylenko.commons.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.commons.DatabaseUtils.RsRowParser;
 import org.github.dmikhaylenko.commons.time.TimeUtils;
-import org.github.dmikhaylenko.model.pagination.Pagination;
+import org.github.dmikhaylenko.dao.DBPaginate;
 import org.github.dmikhaylenko.modules.users.UserIdModel;
 import org.github.dmikhaylenko.modules.users.UserModel;
 
@@ -85,7 +85,7 @@ public class MessageViewModel {
 			+ "OFFSET ?";
 	// @formatter:on
 
-	public static List<MessageViewModel> findMessages(UserIdModel userId, Long currentUserId, Pagination pagination) {
+	public static List<MessageViewModel> findMessages(UserIdModel userId, Long currentUserId, DBPaginate pagination) {
 		return DatabaseUtils.executeWithPreparedStatement(FIND_MESSAGES_QUERY,
 				(connection, statement) -> {
 					statement.setLong(1, userId.unwrap());

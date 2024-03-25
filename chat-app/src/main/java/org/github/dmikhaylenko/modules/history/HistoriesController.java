@@ -12,6 +12,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
 import org.github.dmikhaylenko.commons.time.TimezoneUtils;
+import org.github.dmikhaylenko.dao.DBPaginate;
 import org.github.dmikhaylenko.model.AuthTokenModel;
 import org.github.dmikhaylenko.model.ResponseModel;
 import org.github.dmikhaylenko.model.pagination.Pagination;
@@ -27,7 +28,7 @@ public class HistoriesController {
 		TimezoneUtils.loadZoneOffset(headers);
 		AuthTokenModel token = AuthTokenModel.getTokenFromHeader(headers);
 		token.checkThatAuthenticated();
-		Pagination pagination = Pagination.of(pg, ps).defaults(1, 500L, 50L);
+		DBPaginate pagination = Pagination.of(pg, ps).defaults(1, 500L, 50L);
 		List<HistoryModel> histories = HistoryModel.findHistories(token, pagination);
 		Long total = HistoryModel.countHistories(token);
 		Long totalUnwatched = HistoryModel.countUnwatchedHistories(token);
@@ -65,7 +66,7 @@ public class HistoriesController {
 		UserIdModel userIdModel = new UserIdModel(userId);
 		userIdModel.checkThatRequestedUserExists();
 		Long currentUserId = token.getAuthenticatedUser();
-		Pagination pagination = Pagination.of(pg, ps).pageSizeDefaults(500, 50).defaultPageNumber((currentPageNumber, currentPageSize) -> {
+		DBPaginate pagination = Pagination.of(pg, ps).pageSizeDefaults(500, 50).defaultPageNumber((currentPageNumber, currentPageSize) -> {
 			return MessageViewModel.getLastPage(currentUserId, currentPageSize.getPageSize());
 		});
 		Long total = MessageViewModel.getTotalMessages(userIdModel, currentUserId);

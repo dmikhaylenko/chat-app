@@ -2,9 +2,9 @@ package org.github.dmikhaylenko.modules.users;
 
 import java.time.LocalDateTime;
 
-import org.github.dmikhaylenko.commons.DatabaseUtils;
-import org.github.dmikhaylenko.commons.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.commons.time.TimeUtils;
+import org.github.dmikhaylenko.dao.DBUser;
+import org.github.dmikhaylenko.dao.Dao;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -34,6 +34,16 @@ public class UserModel {
 		this.lastAuth = TimeUtils.currentLocalDateTime();
 	}
 	
+	public UserModel(DBUser dbUser) {
+		super();
+		this.id = dbUser.getId();
+		this.phone = dbUser.getPhone();
+		this.password = dbUser.getPassword();
+		this.avatar = dbUser.getAvatarHref();
+		this.publicName = dbUser.getUsername();
+		this.lastAuth = dbUser.getLastAuth();
+	}
+	
 	public Long registerUser() {
 		checkThatUserWithPhoneExists();
 		checkThatUserWithNickNameExists();
@@ -57,61 +67,31 @@ public class UserModel {
 		}
 	}
 	
-	private static final String CHECK_EXISTS_WITH_PHONE_QUERY = "SELECT COUNT(*) > 0 FROM USER WHERE PHONE = ?";
-
 	private boolean existsWithThePhone() {
-		return DatabaseUtils.executeWithPreparedStatement(CHECK_EXISTS_WITH_PHONE_QUERY,
-				(connection, statement) -> {
-					statement.setString(1, getPhone());
-					return DatabaseUtils
-							.parseResultSetSingleRow(statement.executeQuery(), RowParsers.booleanValueRowMapper())
-							.get();
-				});
+		return Dao.userDao().existsWithThePhone(getPhone());
 	}
-
-	private static final String CHECK_EXISTS_WITH_NICKNAME_QUERY = "SELECT COUNT(*) > 0 FROM USER WHERE USERNAME = ?";
-
+	
 	private boolean existsWithTheNickname() {
-		return DatabaseUtils.executeWithPreparedStatement(CHECK_EXISTS_WITH_NICKNAME_QUERY,
-				(connection, statement) -> {
-					statement.setString(1, getPublicName());
-					return DatabaseUtils
-							.parseResultSetSingleRow(statement.executeQuery(), RowParsers.booleanValueRowMapper())
-							.get();
-				});
+		return Dao.userDao().existsWithTheNickname(getPublicName());
 	}
-
-	private static final String INSERT_TO_USER_TABLE_QUERY = "INSERT INTO USER(PHONE, PASSWORD, USERNAME, AVATAR_HREF) VALUES(?,?,?,?)";
-
+	
+	private DBUser createDbUser() {
+		return DBUser.builder()
+				.id(getId())
+				.phone(getPhone())
+				.password(getPassword())
+				.username(getPublicName())
+				.avatarHref(getAvatar())
+				.lastAuth(getLastAuth())
+				.build();
+	}
+	
 	private Long insertToUserTable() {
-		return DatabaseUtils.executeWithPreparedStatement(INSERT_TO_USER_TABLE_QUERY,
-				(connection, statement) -> {
-					connection.setAutoCommit(false);
-					statement.setString(1, getPhone());
-					statement.setString(2, getPassword());
-					statement.setString(3, getPublicName());
-					statement.setString(4, getAvatar());
-					statement.executeUpdate();
-					Long id = DatabaseUtils.lastInsertedId(connection).get();
-					connection.commit();
-					return id;
-				});
+		return Dao.userDao().insertToUserTable(createDbUser());
 	}
-
-	private static final String UPDATE_INTO_USER_TABLE_QUERY = "UPDATE USER SET PHONE=?, PASSWORD=?, USERNAME=?, AVATAR_HREF=? WHERE ID=?";
-
+	
 	private UserModel updateIntoUserTable() {
-		return DatabaseUtils.executeWithPreparedStatement(UPDATE_INTO_USER_TABLE_QUERY,
-				(connection, statement) -> {
-					connection.setAutoCommit(false);
-					statement.setString(1, getPhone());
-					statement.setString(2, getPassword());
-					statement.setString(3, getPublicName());
-					statement.setString(4, getAvatar());
-					statement.setLong(5, getId());
-					statement.executeUpdate();
-					connection.commit();
-					return this;
-				});
+		Dao.userDao().updateIntoUserTable(createDbUser());
+		return this;
 	}
 }

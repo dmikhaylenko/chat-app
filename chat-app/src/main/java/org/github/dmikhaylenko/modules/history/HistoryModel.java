@@ -16,8 +16,8 @@ import org.github.dmikhaylenko.commons.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.commons.DatabaseUtils.RsRowParser;
 import org.github.dmikhaylenko.commons.adapters.JaxbLocalDateTimeAdapter;
 import org.github.dmikhaylenko.commons.time.TimeUtils;
+import org.github.dmikhaylenko.dao.DBPaginate;
 import org.github.dmikhaylenko.model.AuthTokenModel;
-import org.github.dmikhaylenko.model.pagination.Pagination;
 import org.github.dmikhaylenko.modules.users.UserIdModel;
 
 import lombok.EqualsAndHashCode;
@@ -69,7 +69,7 @@ public class HistoryModel {
 			+ "OFFSET ?";
 	// @formatter:on
 
-	public static List<HistoryModel> findHistories(AuthTokenModel token, Pagination pagination) {
+	public static List<HistoryModel> findHistories(AuthTokenModel token, DBPaginate pagination) {
 		return DatabaseUtils.executeWithPreparedStatement(FIND_HISTORIES_QUERY,
 				(connection, statement) -> {
 					statement.setString(1, token.getToken());
