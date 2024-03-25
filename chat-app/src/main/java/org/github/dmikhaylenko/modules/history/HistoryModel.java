@@ -15,9 +15,10 @@ import org.github.dmikhaylenko.commons.DatabaseUtils;
 import org.github.dmikhaylenko.commons.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.commons.DatabaseUtils.RsRowParser;
 import org.github.dmikhaylenko.commons.adapters.JaxbLocalDateTimeAdapter;
-import org.github.dmikhaylenko.commons.auth.AuthTokenModel;
-import org.github.dmikhaylenko.commons.pagination.Pagination;
 import org.github.dmikhaylenko.commons.time.TimeUtils;
+import org.github.dmikhaylenko.model.AuthTokenModel;
+import org.github.dmikhaylenko.model.pagination.Pagination;
+import org.github.dmikhaylenko.modules.users.UserIdModel;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -128,12 +129,12 @@ public class HistoryModel {
 			+ "    (SRC_ID = ? AND DEST_ID = ?)";
 	// @formatter:on
 
-	public static void clearAllMessages(Long currentUserId, Long userId) {
+	public static void clearAllMessages(Long currentUserId, UserIdModel userId) {
 		DatabaseUtils.executeWithPreparedStatement(CLEAR_ALL_MESSAGES_QUERY,
 				(connection, statement) -> {
 					statement.setLong(1, currentUserId);
-					statement.setLong(2, userId);
-					statement.setLong(3, userId);
+					statement.setLong(2, userId.unwrap());
+					statement.setLong(3, userId.unwrap());
 					statement.setLong(4, currentUserId);
 					statement.executeUpdate();
 					return null;

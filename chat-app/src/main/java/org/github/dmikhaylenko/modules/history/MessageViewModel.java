@@ -13,8 +13,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.github.dmikhaylenko.commons.DatabaseUtils;
 import org.github.dmikhaylenko.commons.DatabaseUtils.RowParsers;
 import org.github.dmikhaylenko.commons.DatabaseUtils.RsRowParser;
-import org.github.dmikhaylenko.commons.pagination.Pagination;
 import org.github.dmikhaylenko.commons.time.TimeUtils;
+import org.github.dmikhaylenko.model.pagination.Pagination;
+import org.github.dmikhaylenko.modules.users.UserIdModel;
 import org.github.dmikhaylenko.modules.users.UserModel;
 
 import lombok.EqualsAndHashCode;
@@ -84,10 +85,10 @@ public class MessageViewModel {
 			+ "OFFSET ?";
 	// @formatter:on
 
-	public static List<MessageViewModel> findMessages(Long userId, Long currentUserId, Pagination pagination) {
+	public static List<MessageViewModel> findMessages(UserIdModel userId, Long currentUserId, Pagination pagination) {
 		return DatabaseUtils.executeWithPreparedStatement(FIND_MESSAGES_QUERY,
 				(connection, statement) -> {
-					statement.setLong(1, userId);
+					statement.setLong(1, userId.unwrap());
 					statement.setLong(2, currentUserId);
 					statement.setLong(3, pagination.getPageSize());
 					statement.setLong(4, pagination.getOffset());
@@ -107,10 +108,10 @@ public class MessageViewModel {
 			+ "    MSG.USER_ID = ?";
 	// @formatter:on
 
-	public static Long getTotalMessages(Long userId, Long currentUserId) {
+	public static Long getTotalMessages(UserIdModel userId, Long currentUserId) {
 		return DatabaseUtils.executeWithPreparedStatement(GET_TOTAL_MESSAGES_QUERY,
 				(connection, statement) -> {
-					statement.setLong(1, userId);
+					statement.setLong(1, userId.unwrap());
 					statement.setLong(2, currentUserId);
 					return DatabaseUtils
 							.parseResultSetSingleRow(statement.executeQuery(), RowParsers.longValueRowMapper()).get();

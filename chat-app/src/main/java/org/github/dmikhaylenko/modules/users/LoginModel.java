@@ -2,30 +2,23 @@ package org.github.dmikhaylenko.modules.users;
 
 import java.util.Optional;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.github.dmikhaylenko.commons.DatabaseUtils;
 import org.github.dmikhaylenko.commons.DatabaseUtils.RowParsers;
 
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Getter
 @ToString
-@XmlRootElement
-@NoArgsConstructor
 @EqualsAndHashCode
-@XmlAccessorType(XmlAccessType.FIELD)
 public class LoginModel {
-	@XmlElement
 	private String username;
-	@XmlElement
 	private String password;
+	
+	public LoginModel(LoginRequest request) {
+		super();
+		this.username = request.getUsername();
+		this.password = request.getPassword();
+	}
 	
 	private static final String CALL_LOGIN_QUERY = "SELECT LOGIN(?, ?) AS TOKEN FROM DUAL";
 	
@@ -35,8 +28,8 @@ public class LoginModel {
 	
 	private Optional<String> executeLogin() {
 		return DatabaseUtils.executeWithPreparedStatement(CALL_LOGIN_QUERY, (connection, statement) -> {
-			statement.setString(1, getUsername());
-			statement.setString(2, getPassword());
+			statement.setString(1, username);
+			statement.setString(2, password);
 			return DatabaseUtils.parseResultSetSingleRow(statement.executeQuery(), RowParsers.stringValueRowMapper());
 		});
 	}

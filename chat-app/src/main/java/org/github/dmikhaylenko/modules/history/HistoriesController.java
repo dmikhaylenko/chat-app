@@ -11,13 +11,13 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
-import org.github.dmikhaylenko.commons.auth.AuthTokenModel;
-import org.github.dmikhaylenko.commons.pagination.Pagination;
 import org.github.dmikhaylenko.commons.time.TimezoneUtils;
-import org.github.dmikhaylenko.commons.validation.ValidationUtils;
+import org.github.dmikhaylenko.model.AuthTokenModel;
 import org.github.dmikhaylenko.model.ResponseModel;
+import org.github.dmikhaylenko.model.pagination.Pagination;
+import org.github.dmikhaylenko.model.validation.ValidationUtils;
 import org.github.dmikhaylenko.modules.messages.MessageModel;
-import org.github.dmikhaylenko.modules.users.UserModel;
+import org.github.dmikhaylenko.modules.users.UserIdModel;
 
 @Path("/histories")
 public class HistoriesController {
@@ -50,8 +50,9 @@ public class HistoriesController {
 	public ClearHistoryResponse clearHistory(@Context HttpHeaders headers, @PathParam("userId") Long userId) {
 		AuthTokenModel token = AuthTokenModel.getTokenFromHeader(headers);
 		token.checkThatAuthenticated();
-		UserModel.checkThatRequestedUserExits(userId);
-		HistoryModel.clearAllMessages(token.getAuthenticatedUser(), userId);
+		UserIdModel userIdModel = new UserIdModel(userId);
+		userIdModel.checkThatRequestedUserExists();
+		HistoryModel.clearAllMessages(token.getAuthenticatedUser(), userIdModel);
 		return new ClearHistoryResponse();
 	}
 
@@ -61,13 +62,14 @@ public class HistoriesController {
 			@QueryParam("pg") Long pg, @QueryParam("ps") Long ps) {
 		AuthTokenModel token = AuthTokenModel.getTokenFromHeader(headers);
 		token.checkThatAuthenticated();
-		UserModel.checkThatRequestedUserExits(userId);
+		UserIdModel userIdModel = new UserIdModel(userId);
+		userIdModel.checkThatRequestedUserExists();
 		Long currentUserId = token.getAuthenticatedUser();
 		Pagination pagination = Pagination.of(pg, ps).pageSizeDefaults(500, 50).defaultPageNumber((currentPageNumber, currentPageSize) -> {
 			return MessageViewModel.getLastPage(currentUserId, currentPageSize.getPageSize());
 		});
-		Long total = MessageViewModel.getTotalMessages(userId, currentUserId);
-		List<MessageViewModel> messages = MessageViewModel.findMessages(userId, currentUserId, pagination);
+		Long total = MessageViewModel.getTotalMessages(userIdModel, currentUserId);
+		List<MessageViewModel> messages = MessageViewModel.findMessages(userIdModel, currentUserId, pagination);
 		return new ShowHistoryMessages(pagination.getPageNumber(), total, messages);
 	}
 }

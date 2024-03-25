@@ -1,4 +1,4 @@
-package org.github.dmikhaylenko.commons.errors;
+package org.github.dmikhaylenko.model.errors;
 
 public class CheckedExceptionWrapper extends RuntimeException {
 	private static final long serialVersionUID = 2363686746532297513L;

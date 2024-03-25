@@ -1,4 +1,4 @@
-package org.github.dmikhaylenko.commons.validation;
+package org.github.dmikhaylenko.model.validation;
 
 import java.util.Set;
 

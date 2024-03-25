@@ -1,9 +1,9 @@
-package org.github.dmikhaylenko.commons.auth;
+package org.github.dmikhaylenko.model;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.github.dmikhaylenko.commons.errors.ApplicationException;
+import org.github.dmikhaylenko.model.errors.ApplicationException;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package org.github.dmikhaylenko.commons.auth;
+package org.github.dmikhaylenko.model;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -6,8 +6,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import org.github.dmikhaylenko.commons.errors.ApplicationErrorResponse;
-import org.github.dmikhaylenko.model.ResponseModel;
+import org.github.dmikhaylenko.model.errors.ApplicationErrorResponse;
 
 @Provider
 public class AuthenticationExceptionMapper implements ExceptionMapper<AuthenticationException> {

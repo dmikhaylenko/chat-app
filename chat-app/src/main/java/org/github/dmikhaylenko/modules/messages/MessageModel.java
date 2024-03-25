@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.github.dmikhaylenko.commons.DatabaseUtils;
 import org.github.dmikhaylenko.commons.DatabaseUtils.RsRowParser;
-import org.github.dmikhaylenko.commons.auth.AuthTokenModel;
 import org.github.dmikhaylenko.commons.time.TimeUtils;
-import org.github.dmikhaylenko.modules.users.UserModel;
+import org.github.dmikhaylenko.model.AuthTokenModel;
+import org.github.dmikhaylenko.modules.users.UserIdModel;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -63,7 +63,8 @@ public class MessageModel {
 	}
 
 	public Long writeMessage(AuthTokenModel authToken, Long userId) {
-		UserModel.checkThatRequestedUserExits(userId);
+		UserIdModel userIdModel = new UserIdModel(userId);
+		userIdModel.checkThatRequestedUserExists();
 		this.srcId = authToken.getAuthenticatedUser();
 		this.destId = userId;
 		return insertIntoMessageTable();

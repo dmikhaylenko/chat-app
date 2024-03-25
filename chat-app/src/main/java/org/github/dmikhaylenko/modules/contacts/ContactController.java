@@ -7,8 +7,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
-import org.github.dmikhaylenko.commons.auth.AuthTokenModel;
-import org.github.dmikhaylenko.commons.validation.ValidationUtils;
+import org.github.dmikhaylenko.model.AuthTokenModel;
+import org.github.dmikhaylenko.model.validation.ValidationUtils;
 
 @Path("/contacts")
 public class ContactController {

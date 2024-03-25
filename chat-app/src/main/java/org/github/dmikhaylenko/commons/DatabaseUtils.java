@@ -11,7 +11,7 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
-import org.github.dmikhaylenko.commons.errors.CheckedExceptionWrapper;
+import org.github.dmikhaylenko.model.errors.CheckedExceptionWrapper;
 
 import lombok.experimental.UtilityClass;
 

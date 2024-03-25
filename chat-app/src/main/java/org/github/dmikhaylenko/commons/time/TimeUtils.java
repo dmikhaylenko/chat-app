@@ -9,6 +9,14 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class TimeUtils {
+	public Instant currentInstant() {
+		return Instant.now();
+	}
+	
+	public LocalDateTime currentLocalDateTime() {
+		return createLocalDateTime(currentInstant());
+	}
+	
 	public LocalDateTime createLocalDateTime(Instant instant) {
 		return Optional.ofNullable(instant).map(value -> {
 			return LocalDateTime.ofInstant(value, TimezoneUtils.getZoneOffset());

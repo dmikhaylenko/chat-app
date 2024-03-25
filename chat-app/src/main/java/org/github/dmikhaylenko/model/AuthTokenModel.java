@@ -1,4 +1,4 @@
-package org.github.dmikhaylenko.commons.auth;
+package org.github.dmikhaylenko.model;
 
 import java.util.Optional;
 import java.util.regex.Matcher;

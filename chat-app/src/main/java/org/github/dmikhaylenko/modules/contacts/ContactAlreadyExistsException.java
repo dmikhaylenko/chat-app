@@ -1,6 +1,6 @@
 package org.github.dmikhaylenko.modules.contacts;
 
-import org.github.dmikhaylenko.commons.errors.ApplicationException;
+import org.github.dmikhaylenko.model.errors.ApplicationException;
 
 import lombok.ToString;
 

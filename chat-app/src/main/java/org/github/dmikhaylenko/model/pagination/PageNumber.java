@@ -1,4 +1,4 @@
-package org.github.dmikhaylenko.commons.pagination;
+package org.github.dmikhaylenko.model.pagination;
 
 import java.util.Optional;
 

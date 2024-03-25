@@ -1,6 +1,6 @@
-package org.github.dmikhaylenko.commons.validation;
+package org.github.dmikhaylenko.model.validation;
 
-import org.github.dmikhaylenko.commons.errors.ApplicationException;
+import org.github.dmikhaylenko.model.errors.ApplicationException;
 
 import lombok.ToString;
 

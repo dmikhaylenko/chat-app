@@ -9,8 +9,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.github.dmikhaylenko.commons.DatabaseUtils;
 import org.github.dmikhaylenko.commons.DatabaseUtils.RowParsers;
-import org.github.dmikhaylenko.commons.auth.AuthTokenModel;
-import org.github.dmikhaylenko.modules.users.UserModel;
+import org.github.dmikhaylenko.model.AuthTokenModel;
+import org.github.dmikhaylenko.modules.users.UserIdModel;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -55,7 +55,8 @@ public class ContactModel {
 	}
 	
 	private void checkThatRequestedUserExits() {
-		UserModel.checkThatRequestedUserExits(getContactId());
+		UserIdModel userId = new UserIdModel(getContactId());
+		userId.checkThatRequestedUserExists();
 	}
 
 	private void checkThatContactDoesNotExistIntoTable() {

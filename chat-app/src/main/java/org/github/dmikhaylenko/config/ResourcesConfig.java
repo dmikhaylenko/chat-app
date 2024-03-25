@@ -13,7 +13,7 @@ import javax.validation.Validator;
 
 import org.github.dmikhaylenko.commons.DatabaseUtils;
 import org.github.dmikhaylenko.commons.time.TimezoneUtils;
-import org.github.dmikhaylenko.commons.validation.ValidationUtils;
+import org.github.dmikhaylenko.model.validation.ValidationUtils;
 
 @ApplicationScoped
 public class ResourcesConfig {

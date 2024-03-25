@@ -1,4 +1,4 @@
-package org.github.dmikhaylenko.commons.errors;
+package org.github.dmikhaylenko.model.errors;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
