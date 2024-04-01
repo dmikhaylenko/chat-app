@@ -9,8 +9,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.github.dmikhaylenko.model.SuccessResponse;
-import org.github.dmikhaylenko.model.UserModel;
+import org.github.dmikhaylenko.modules.SuccessResponse;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -30,10 +29,10 @@ public class SearchUsersResponse extends SuccessResponse {
 
 	@XmlElement
 	private Long total;
-
-	public SearchUsersResponse(List<UserModel> users, Long total) {
+	
+	public SearchUsersResponse(SearchUserQueryResult queryResult) {
 		super();
-		this.total = total;
-		users.stream().map(FoundUser::new).forEach(this.users::add);
-	}
+		this.total = queryResult.getTotal();
+		queryResult.getUsers().stream().map(FoundUser::new).forEach(this.users::add);
+	}	
 }

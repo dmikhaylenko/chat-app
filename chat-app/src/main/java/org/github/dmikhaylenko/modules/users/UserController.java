@@ -1,5 +1,6 @@
 package org.github.dmikhaylenko.modules.users;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -7,31 +8,38 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
-import org.github.dmikhaylenko.model.AuthTokenModel;
+import org.github.dmikhaylenko.http.HttpOperationContext;
 
 @Path("/users")
 public class UserController {
-	private RegisterUserOperation registerUserOperation = new RegisterUserOperation();
-	private SearchUsersOperation searchUsersOperation = new SearchUsersOperation();
-	private ChangePasswordOperation changePasswordOperation = new ChangePasswordOperation();
+	@Inject
+	private RegisterUserOperation registerUserOperation;
+	
+	@Inject
+	private SearchUsersOperation searchUsersOperation;
+	
+	@Inject
+	private ChangePasswordOperation changePasswordOperation;
 
 	@POST
-	public RegisterUserResponse registerUser(RegisterUserRequest model) {
-		return registerUserOperation.execute(model);
+	public RegisterUserResponse registerUser(@Context HttpHeaders headers, RegisterUserRequest model) {
+		Long userId = registerUserOperation.execute(new HttpOperationContext(headers), model);
+		return new RegisterUserResponse(userId);
 	}
 
 	@GET
 	@Path("/search")
 	public SearchUsersResponse searchUsers(@Context HttpHeaders headers, @QueryParam("sstr") String searchString,
 			@QueryParam("pg") Long pageNumber, @QueryParam("ps") Long pageSize) {
-		AuthTokenModel token = AuthTokenModel.getTokenFromHeader(headers);
-		return searchUsersOperation.execute(token, new SearchUserRequest(searchString, pageNumber, pageSize));
+		SearchUserQueryResult result = searchUsersOperation.execute(new HttpOperationContext(headers),
+				new SearchUserRequest(searchString, pageNumber, pageSize));
+		return new SearchUsersResponse(result);
 	}
 
 	@POST
 	@Path("/current/password")
 	public ChangePasswordResponse changePassword(@Context HttpHeaders headers, ChangePasswordRequest request) {
-		AuthTokenModel token = AuthTokenModel.getTokenFromHeader(headers);
-		return changePasswordOperation.execute(token, request);
+		Long userId = changePasswordOperation.execute(new HttpOperationContext(headers), request);
+		return new ChangePasswordResponse(userId);
 	}
 }

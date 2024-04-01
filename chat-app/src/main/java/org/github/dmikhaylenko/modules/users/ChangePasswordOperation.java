@@ -1,15 +1,24 @@
 package org.github.dmikhaylenko.modules.users;
 
-import org.github.dmikhaylenko.model.AuthTokenModel;
-import org.github.dmikhaylenko.model.ChangePasswordModel;
-import org.github.dmikhaylenko.model.validation.ValidationUtils;
+import javax.enterprise.inject.Default;
 
-public class ChangePasswordOperation {
-	public ChangePasswordResponse execute(AuthTokenModel token, ChangePasswordRequest request) {
+import org.github.dmikhaylenko.operations.AuthenticationDecorator;
+import org.github.dmikhaylenko.operations.GenericOperation;
+import org.github.dmikhaylenko.operations.OperationContext;
+import org.github.dmikhaylenko.operations.ValidationDecorator;
+
+@Default
+public class ChangePasswordOperation extends GenericOperation<ChangePasswordCommand, Long> {
+	public ChangePasswordOperation() {
+		super(configurer -> {
+			configurer.decorate(new ValidationDecorator<>());
+			configurer.decorate(new AuthenticationDecorator<>());
+		});
+	}
+
+	@Override
+	public Long executeOperation(OperationContext context, ChangePasswordCommand request) {
 		ChangePasswordModel model = new ChangePasswordModel(request);
-		ValidationUtils.checkConstraints(request);
-		token.checkThatAuthenticated();
-		Long userId = model.changePassword(token);
-		return new ChangePasswordResponse(userId);
+		return model.changePassword(context.getAuthentication());
 	}
 }

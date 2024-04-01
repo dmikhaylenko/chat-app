@@ -2,19 +2,37 @@ package org.github.dmikhaylenko.modules.users;
 
 import java.util.List;
 
-import org.github.dmikhaylenko.dao.DBPaginate;
-import org.github.dmikhaylenko.model.AuthTokenModel;
-import org.github.dmikhaylenko.model.UserModel;
-import org.github.dmikhaylenko.model.UsersModel;
+import javax.enterprise.inject.Default;
 
-public class SearchUsersOperation {
-	public SearchUsersResponse execute(AuthTokenModel token, SearchUserRequest request) {
+import org.github.dmikhaylenko.dao.DBPaginate;
+import org.github.dmikhaylenko.operations.AuthenticationDecorator;
+import org.github.dmikhaylenko.operations.GenericOperation;
+import org.github.dmikhaylenko.operations.OperationContext;
+
+@Default
+public class SearchUsersOperation extends GenericOperation<SearchUserQuery, SearchUserQueryResult> {
+	public SearchUsersOperation() {
+		super(configurer -> {
+			configurer.decorate(new AuthenticationDecorator<>());
+		});
+	}
+
+	@Override
+	public SearchUserQueryResult executeOperation(OperationContext context, SearchUserQuery request) {
 		UsersModel usersModel = new UsersModel();
 		String searchString = request.getSearchString();
 		DBPaginate pagination = request.getPagination();
-		token.checkThatAuthenticated();
-		List<UserModel> users = usersModel.findByPhoneOrUsername(searchString, pagination);
-		Long total = usersModel.countByPhoneOrUsername(searchString);
-		return new SearchUsersResponse(users, total);
+		return new SearchUserQueryResult() {
+			
+			@Override
+			public List<UserModel> getUsers() {
+				return usersModel.findByPhoneOrUsername(searchString, pagination);
+			}
+			
+			@Override
+			public Long getTotal() {
+				return usersModel.countByPhoneOrUsername(searchString);
+			}
+		};
 	}
 }
