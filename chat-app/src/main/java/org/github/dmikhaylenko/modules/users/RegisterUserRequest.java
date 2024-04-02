@@ -21,7 +21,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @EqualsAndHashCode
 @XmlAccessorType(XmlAccessType.FIELD)
-public class RegisterUserRequest {
+public class RegisterUserRequest implements RegisterUserCommand {
 	@NotNull
 	@XmlElement
 	@Size(max = 1000)

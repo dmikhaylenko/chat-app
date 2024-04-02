@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.github.dmikhaylenko.model.SuccessResponse;
+import org.github.dmikhaylenko.modules.SuccessResponse;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

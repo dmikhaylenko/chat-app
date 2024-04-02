@@ -19,7 +19,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ChangePasswordRequest {
+public class ChangePasswordRequest implements ChangePasswordCommand {
 	@XmlElement
 	private String username;
 

@@ -1,5 +1,6 @@
 package org.github.dmikhaylenko.modules.messages;
 
+import javax.inject.Inject;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -7,30 +8,29 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
-import org.github.dmikhaylenko.model.AuthTokenModel;
-import org.github.dmikhaylenko.model.validation.ValidationUtils;
+import org.github.dmikhaylenko.http.HttpOperationContext;
 
 @Path("/messages")
 public class MessagesController {
+	@Inject
+	private EditMessageOperation editMessageOperation;
+	
+	@Inject
+	private DeleteMessageOperation deleteMessageOperation;
+
 	@PUT
 	@Path("/{messageId}")
 	public EditMessageResponse editMessageText(@Context HttpHeaders headers, @PathParam("messageId") Long messageId,
-			EditMessageModel model) {
-		ValidationUtils.checkConstraints(model);
-		AuthTokenModel token = AuthTokenModel.getTokenFromHeader(headers);
-		token.checkThatAuthenticated();
-		MessageModel messageModel = MessageModel.getById(messageId);
-		messageModel.editMessage(token, model);
+			MessageContentData messageContent) {
+		editMessageOperation.execute(new HttpOperationContext(headers),
+				new EditMessageRequest(messageId, messageContent));
 		return new EditMessageResponse();
 	}
 
 	@DELETE
 	@Path("/{messageId}")
 	public DeleteMessageResponse deleteMessage(@Context HttpHeaders headers, @PathParam("messageId") Long messageId) {
-		AuthTokenModel token = AuthTokenModel.getTokenFromHeader(headers);
-		token.checkThatAuthenticated();
-		MessageModel messageModel = MessageModel.getById(messageId);
-		messageModel.deleteMessage(token);
+		deleteMessageOperation.execute(new HttpOperationContext(headers), new DeleteMessageRequest(messageId));
 		return new DeleteMessageResponse();
 	}
 }

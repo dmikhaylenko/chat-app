@@ -1,13 +1,22 @@
 package org.github.dmikhaylenko.modules.users;
 
-import org.github.dmikhaylenko.model.UserModel;
-import org.github.dmikhaylenko.model.validation.ValidationUtils;
+import javax.enterprise.inject.Default;
 
-public class RegisterUserOperation {
-	public RegisterUserResponse execute(RegisterUserRequest command) {
-		ValidationUtils.checkConstraints(command);
+import org.github.dmikhaylenko.operations.GenericOperation;
+import org.github.dmikhaylenko.operations.OperationContext;
+import org.github.dmikhaylenko.operations.ValidationDecorator;
+
+@Default
+public class RegisterUserOperation extends GenericOperation<RegisterUserCommand, Long> {
+	public RegisterUserOperation() {
+		super(configurer -> {
+			configurer.decorate(new ValidationDecorator<>());
+		});
+	}
+
+	@Override
+	public Long executeOperation(OperationContext context, RegisterUserCommand command) {
 		UserModel model = new UserModel(command);
-		Long userId = model.registerUser();
-		return new RegisterUserResponse(userId);
+		return model.registerUser();
 	}
 }
