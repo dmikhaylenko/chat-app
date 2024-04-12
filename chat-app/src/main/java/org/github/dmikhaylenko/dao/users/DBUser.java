@@ -9,8 +9,8 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @ToString
-@SuperBuilder
 @EqualsAndHashCode
+@SuperBuilder(toBuilder = true)
 public class DBUser {
 	private Long id;
 	private String phone;

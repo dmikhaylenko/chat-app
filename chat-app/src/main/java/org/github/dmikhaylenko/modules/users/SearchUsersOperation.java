@@ -5,8 +5,8 @@ import java.util.List;
 import javax.enterprise.inject.Default;
 
 import org.github.dmikhaylenko.dao.DBPaginate;
-import org.github.dmikhaylenko.operations.AuthenticationDecorator;
-import org.github.dmikhaylenko.operations.GenericOperation;
+import org.github.dmikhaylenko.modules.AuthenticationDecorator;
+import org.github.dmikhaylenko.modules.GenericOperation;
 import org.github.dmikhaylenko.operations.OperationContext;
 
 @Default

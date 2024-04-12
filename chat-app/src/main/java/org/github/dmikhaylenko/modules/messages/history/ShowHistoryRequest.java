@@ -19,6 +19,6 @@ public class ShowHistoryRequest implements ShowHistoryCommand {
 
 	@Override
 	public Pagination getPagination(DefaultPageNumberCalculator pageNumberCalculator) {
-		return Pagination.of(pageNumber, pageSize).pageSizeDefaults(500, 50).defaultPageNumber(pageNumberCalculator);
+		return Pagination.of(pageNumber, pageSize).pageSizeDefaults(500, 50).calculateDefaultPageNumber(pageNumberCalculator);
 	}
 }

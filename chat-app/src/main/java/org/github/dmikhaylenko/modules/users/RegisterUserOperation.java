@@ -2,7 +2,7 @@ package org.github.dmikhaylenko.modules.users;
 
 import javax.enterprise.inject.Default;
 
-import org.github.dmikhaylenko.operations.GenericOperation;
+import org.github.dmikhaylenko.modules.GenericOperation;
 import org.github.dmikhaylenko.operations.OperationContext;
 import org.github.dmikhaylenko.operations.ValidationDecorator;
 

@@ -2,9 +2,9 @@ package org.github.dmikhaylenko.modules.messages.history;
 
 import javax.enterprise.inject.Default;
 
+import org.github.dmikhaylenko.modules.AuthenticationDecorator;
+import org.github.dmikhaylenko.modules.GenericOperation;
 import org.github.dmikhaylenko.modules.messages.MessageModel;
-import org.github.dmikhaylenko.operations.AuthenticationDecorator;
-import org.github.dmikhaylenko.operations.GenericOperation;
 import org.github.dmikhaylenko.operations.OperationContext;
 import org.github.dmikhaylenko.operations.ValidationDecorator;
 

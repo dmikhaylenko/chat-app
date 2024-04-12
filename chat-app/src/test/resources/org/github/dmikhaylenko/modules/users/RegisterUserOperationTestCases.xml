@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RegisterUserTestCases>
+	<RegisterUserSuccessfulTestCase>
+		<currentTime>2024-01-01T10:00:00</currentTime>
+
+		<operationContext/>
+
+		<initialDatabaseState>
+			<sequences>
+				<user-id>0</user-id>
+				<message-id>0</message-id>
+			</sequences>
+			<users/>
+		</initialDatabaseState>
+
+		<resultDatabaseState>
+			<sequences>
+				<user-id>1</user-id>
+				<message-id>0</message-id>
+			</sequences>
+			
+			<users>
+				<user>
+					<id>1</id>
+					<phone>+79121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2024-01-01T10:00:00</lastAuth>
+				</user>
+			</users>
+		</resultDatabaseState>
+
+		<command>
+			<avatar>http://site.xyz/images/vasya-pupkin.jpg</avatar>
+			<password>Qwerty</password>
+			<phone>+79121111111</phone>
+			<publicName>Вася Пупкин</publicName>
+		</command>
+		<expectedResult>1</expectedResult>
+	</RegisterUserSuccessfulTestCase>
+</RegisterUserTestCases>

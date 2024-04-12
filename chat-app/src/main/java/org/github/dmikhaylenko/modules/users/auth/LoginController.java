@@ -6,7 +6,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
-import org.github.dmikhaylenko.http.HttpOperationContext;
+import org.github.dmikhaylenko.modules.HttpOperationContext;
 import org.github.dmikhaylenko.modules.ResponseModel;
 
 @Path("/auth")

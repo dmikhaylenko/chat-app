@@ -8,8 +8,6 @@ import javax.inject.Inject;
 import org.github.dmikhaylenko.dao.DBPaginate;
 import org.github.dmikhaylenko.dao.Database;
 import org.github.dmikhaylenko.dao.Database.RowParsers;
-import org.github.dmikhaylenko.dao.messages.DBMessageView;
-import org.github.dmikhaylenko.dao.messages.DBMessageViewModelRowParser;
 
 @ApplicationScoped
 public class MysqlHistoriesDao implements HistoriesDao {

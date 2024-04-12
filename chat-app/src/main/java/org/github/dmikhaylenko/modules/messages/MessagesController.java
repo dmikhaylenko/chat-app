@@ -8,7 +8,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
-import org.github.dmikhaylenko.http.HttpOperationContext;
+import org.github.dmikhaylenko.modules.HttpOperationContext;
 
 @Path("/messages")
 public class MessagesController {

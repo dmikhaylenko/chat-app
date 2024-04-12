@@ -8,7 +8,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
-import org.github.dmikhaylenko.http.HttpOperationContext;
+import org.github.dmikhaylenko.modules.HttpOperationContext;
 
 @Path("/users")
 public class UserController {

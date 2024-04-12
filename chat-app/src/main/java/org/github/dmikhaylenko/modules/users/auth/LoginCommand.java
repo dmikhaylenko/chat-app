@@ -5,5 +5,4 @@ public interface LoginCommand {
 	String getPassword();
 
 	String getUsername();
-
 }

@@ -21,7 +21,7 @@ public class PageSize {
 	public long getPageSize() {
 		return Optional.ofNullable(pageSize).map(val -> {
 			if (val.compareTo(1L) < 0) {
-				return 1L;
+				return defaultPageSize;
 			}
 
 			if (val.compareTo(maxValue) > 0) {

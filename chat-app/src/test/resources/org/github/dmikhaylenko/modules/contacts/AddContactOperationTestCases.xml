@@ -1,0 +1,693 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AddContactTestCases>
+	<AddContactSuccessfulTestCase>
+		<currentTime>2024-01-01T10:00:00</currentTime>
+
+		<operationContext>
+			<authToken>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</authToken>
+		</operationContext>
+
+		<initialDatabaseState>
+			<sequences>
+				<user-id>2</user-id>
+				<message-id>0</message-id>
+			</sequences>
+
+			<auths>
+				<auth>
+					<token>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</token>
+					<userId>1</userId>
+					<exp>2024-01-02T10:00:00</exp>
+					<loggedIn>true</loggedIn>
+				</auth>
+			</auths>
+
+			<users>
+				<user>
+					<id>1</id>
+					<phone>89121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:00:00</lastAuth>
+				</user>
+
+				<user>
+					<id>2</id>
+					<phone>89121111112</phone>
+					<password>Qwerty</password>
+					<username>Манька Красногуб</username>
+					<avatarHref>http://site.xyz/images/manka-krasnogub.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:05:00</lastAuth>
+				</user>
+			</users>
+		</initialDatabaseState>
+
+		<resultDatabaseState>
+			<sequences>
+				<user-id>2</user-id>
+				<message-id>0</message-id>
+			</sequences>
+
+			<auths>
+				<auth>
+					<token>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</token>
+					<userId>1</userId>
+					<exp>2024-01-02T10:00:00</exp>
+					<loggedIn>true</loggedIn>
+				</auth>
+			</auths>
+
+			<users>
+				<user>
+					<id>1</id>
+					<phone>89121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2024-01-01T10:00:00</lastAuth>
+				</user>
+
+				<user>
+					<id>2</id>
+					<phone>89121111112</phone>
+					<password>Qwerty</password>
+					<username>Манька Красногуб</username>
+					<avatarHref>http://site.xyz/images/manka-krasnogub.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:05:00</lastAuth>
+				</user>
+			</users>
+			
+			<contacts>
+				<contact>
+					<whoseId>1</whoseId>
+					<whoId>2</whoId>
+				</contact>
+			</contacts>
+		</resultDatabaseState>
+
+		<command>
+			<contactId>2</contactId>
+		</command>
+	</AddContactSuccessfulTestCase>
+	
+	<!-- Validation error -->
+	<AddContactFailureTestCase>
+		<currentTime>2024-01-01T10:00:00</currentTime>
+
+		<operationContext>
+			<authToken>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</authToken>
+		</operationContext>
+
+		<initialDatabaseState>
+			<sequences>
+				<user-id>2</user-id>
+				<message-id>0</message-id>
+			</sequences>
+
+			<auths>
+				<auth>
+					<token>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</token>
+					<userId>1</userId>
+					<exp>2024-01-02T10:00:00</exp>
+					<loggedIn>true</loggedIn>
+				</auth>
+			</auths>
+
+			<users>
+				<user>
+					<id>1</id>
+					<phone>89121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:00:00</lastAuth>
+				</user>
+
+				<user>
+					<id>2</id>
+					<phone>89121111112</phone>
+					<password>Qwerty</password>
+					<username>Манька Красногуб</username>
+					<avatarHref>http://site.xyz/images/manka-krasnogub.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:05:00</lastAuth>
+				</user>
+			</users>
+		</initialDatabaseState>
+
+		<resultDatabaseState>
+			<sequences>
+				<user-id>2</user-id>
+				<message-id>0</message-id>
+			</sequences>
+
+			<auths>
+				<auth>
+					<token>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</token>
+					<userId>1</userId>
+					<exp>2024-01-02T10:00:00</exp>
+					<loggedIn>true</loggedIn>
+				</auth>
+			</auths>
+
+			<users>
+				<user>
+					<id>1</id>
+					<phone>89121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2024-01-01T10:00:00</lastAuth>
+				</user>
+
+				<user>
+					<id>2</id>
+					<phone>89121111112</phone>
+					<password>Qwerty</password>
+					<username>Манька Красногуб</username>
+					<avatarHref>http://site.xyz/images/manka-krasnogub.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:05:00</lastAuth>
+				</user>
+			</users>
+		</resultDatabaseState>
+
+		<command>
+			<contactId/>
+		</command>
+		
+		<expectedErrorCode>1</expectedErrorCode>
+	</AddContactFailureTestCase>
+
+	<!-- Authenication errors -->
+	<AddContactFailureTestCase>
+		<currentTime>2024-01-01T10:00:00</currentTime>
+
+		<operationContext>
+		</operationContext>
+
+		<initialDatabaseState>
+			<sequences>
+				<user-id>2</user-id>
+				<message-id>0</message-id>
+			</sequences>
+
+			<auths>
+				<auth>
+					<token>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</token>
+					<userId>1</userId>
+					<exp>2024-01-02T10:00:00</exp>
+					<loggedIn>true</loggedIn>
+				</auth>
+			</auths>
+
+			<users>
+				<user>
+					<id>1</id>
+					<phone>89121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:00:00</lastAuth>
+				</user>
+
+				<user>
+					<id>2</id>
+					<phone>89121111112</phone>
+					<password>Qwerty</password>
+					<username>Манька Красногуб</username>
+					<avatarHref>http://site.xyz/images/manka-krasnogub.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:05:00</lastAuth>
+				</user>
+			</users>
+		</initialDatabaseState>
+
+		<resultDatabaseState>
+			<sequences>
+				<user-id>2</user-id>
+				<message-id>0</message-id>
+			</sequences>
+
+			<auths>
+				<auth>
+					<token>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</token>
+					<userId>1</userId>
+					<exp>2024-01-02T10:00:00</exp>
+					<loggedIn>true</loggedIn>
+				</auth>
+			</auths>
+
+			<users>
+				<user>
+					<id>1</id>
+					<phone>89121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:00:00</lastAuth>
+				</user>
+
+				<user>
+					<id>2</id>
+					<phone>89121111112</phone>
+					<password>Qwerty</password>
+					<username>Манька Красногуб</username>
+					<avatarHref>http://site.xyz/images/manka-krasnogub.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:05:00</lastAuth>
+				</user>
+			</users>
+		</resultDatabaseState>
+
+		<command>
+			<contactId>2</contactId>
+		</command>
+		
+		<expectedErrorCode>5</expectedErrorCode>
+	</AddContactFailureTestCase>
+	
+	<AddContactFailureTestCase>
+		<currentTime>2024-01-01T10:00:00</currentTime>
+
+		<operationContext>
+			<authToken>12345678</authToken>
+		</operationContext>
+
+		<initialDatabaseState>
+			<sequences>
+				<user-id>2</user-id>
+				<message-id>0</message-id>
+			</sequences>
+
+			<auths>
+				<auth>
+					<token>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</token>
+					<userId>1</userId>
+					<exp>2024-01-02T10:00:00</exp>
+					<loggedIn>true</loggedIn>
+				</auth>
+			</auths>
+
+			<users>
+				<user>
+					<id>1</id>
+					<phone>89121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:00:00</lastAuth>
+				</user>
+
+				<user>
+					<id>2</id>
+					<phone>89121111112</phone>
+					<password>Qwerty</password>
+					<username>Манька Красногуб</username>
+					<avatarHref>http://site.xyz/images/manka-krasnogub.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:05:00</lastAuth>
+				</user>
+			</users>
+		</initialDatabaseState>
+
+		<resultDatabaseState>
+			<sequences>
+				<user-id>2</user-id>
+				<message-id>0</message-id>
+			</sequences>
+
+			<auths>
+				<auth>
+					<token>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</token>
+					<userId>1</userId>
+					<exp>2024-01-02T10:00:00</exp>
+					<loggedIn>true</loggedIn>
+				</auth>
+			</auths>
+
+			<users>
+				<user>
+					<id>1</id>
+					<phone>89121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:00:00</lastAuth>
+				</user>
+
+				<user>
+					<id>2</id>
+					<phone>89121111112</phone>
+					<password>Qwerty</password>
+					<username>Манька Красногуб</username>
+					<avatarHref>http://site.xyz/images/manka-krasnogub.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:05:00</lastAuth>
+				</user>
+			</users>
+		</resultDatabaseState>
+
+		<command>
+			<contactId>2</contactId>
+		</command>
+		
+		<expectedErrorCode>5</expectedErrorCode>
+	</AddContactFailureTestCase>
+	
+		<AddContactFailureTestCase>
+		<currentTime>2024-01-01T10:00:00</currentTime>
+
+		<operationContext>
+			<authToken>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</authToken>
+		</operationContext>
+
+		<initialDatabaseState>
+			<sequences>
+				<user-id>2</user-id>
+				<message-id>0</message-id>
+			</sequences>
+
+			<auths>
+				<auth>
+					<token>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</token>
+					<userId>1</userId>
+					<exp>2024-01-01T09:59:00</exp>
+					<loggedIn>true</loggedIn>
+				</auth>
+			</auths>
+
+			<users>
+				<user>
+					<id>1</id>
+					<phone>89121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:00:00</lastAuth>
+				</user>
+
+				<user>
+					<id>2</id>
+					<phone>89121111112</phone>
+					<password>Qwerty</password>
+					<username>Манька Красногуб</username>
+					<avatarHref>http://site.xyz/images/manka-krasnogub.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:05:00</lastAuth>
+				</user>
+			</users>
+		</initialDatabaseState>
+
+		<resultDatabaseState>
+			<sequences>
+				<user-id>2</user-id>
+				<message-id>0</message-id>
+			</sequences>
+
+			<auths>
+				<auth>
+					<token>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</token>
+					<userId>1</userId>
+					<exp>2024-01-01T09:59:00</exp>
+					<loggedIn>true</loggedIn>
+				</auth>
+			</auths>
+
+			<users>
+				<user>
+					<id>1</id>
+					<phone>89121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:00:00</lastAuth>
+				</user>
+
+				<user>
+					<id>2</id>
+					<phone>89121111112</phone>
+					<password>Qwerty</password>
+					<username>Манька Красногуб</username>
+					<avatarHref>http://site.xyz/images/manka-krasnogub.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:05:00</lastAuth>
+				</user>
+			</users>
+		</resultDatabaseState>
+
+		<command>
+			<contactId>2</contactId>
+		</command>
+		
+		<expectedErrorCode>5</expectedErrorCode>
+	</AddContactFailureTestCase>
+	
+	<AddContactFailureTestCase>
+		<currentTime>2024-01-01T10:00:00</currentTime>
+
+		<operationContext>
+			<authToken>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</authToken>
+		</operationContext>
+
+		<initialDatabaseState>
+			<sequences>
+				<user-id>2</user-id>
+				<message-id>0</message-id>
+			</sequences>
+
+			<auths>
+				<auth>
+					<token>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</token>
+					<userId>1</userId>
+					<exp>2024-01-02T10:00:00</exp>
+					<loggedIn>false</loggedIn>
+				</auth>
+			</auths>
+
+			<users>
+				<user>
+					<id>1</id>
+					<phone>89121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:00:00</lastAuth>
+				</user>
+
+				<user>
+					<id>2</id>
+					<phone>89121111112</phone>
+					<password>Qwerty</password>
+					<username>Манька Красногуб</username>
+					<avatarHref>http://site.xyz/images/manka-krasnogub.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:05:00</lastAuth>
+				</user>
+			</users>
+		</initialDatabaseState>
+
+		<resultDatabaseState>
+			<sequences>
+				<user-id>2</user-id>
+				<message-id>0</message-id>
+			</sequences>
+
+			<auths>
+				<auth>
+					<token>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</token>
+					<userId>1</userId>
+					<exp>2024-01-02T10:00:00</exp>
+					<loggedIn>false</loggedIn>
+				</auth>
+			</auths>
+
+			<users>
+				<user>
+					<id>1</id>
+					<phone>89121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:00:00</lastAuth>
+				</user>
+
+				<user>
+					<id>2</id>
+					<phone>89121111112</phone>
+					<password>Qwerty</password>
+					<username>Манька Красногуб</username>
+					<avatarHref>http://site.xyz/images/manka-krasnogub.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:05:00</lastAuth>
+				</user>
+			</users>
+		</resultDatabaseState>
+
+		<command>
+			<contactId>2</contactId>
+		</command>
+		
+		<expectedErrorCode>5</expectedErrorCode>
+	</AddContactFailureTestCase>
+	
+	<!-- Operation exceptional cases -->
+		<AddContactFailureTestCase>
+		<currentTime>2024-01-01T10:00:00</currentTime>
+
+		<operationContext>
+			<authToken>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</authToken>
+		</operationContext>
+
+		<initialDatabaseState>
+			<sequences>
+				<user-id>2</user-id>
+				<message-id>0</message-id>
+			</sequences>
+
+			<auths>
+				<auth>
+					<token>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</token>
+					<userId>1</userId>
+					<exp>2024-01-02T10:00:00</exp>
+					<loggedIn>true</loggedIn>
+				</auth>
+			</auths>
+
+			<users>
+				<user>
+					<id>1</id>
+					<phone>89121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:00:00</lastAuth>
+				</user>
+			</users>
+		</initialDatabaseState>
+
+		<resultDatabaseState>
+			<sequences>
+				<user-id>2</user-id>
+				<message-id>0</message-id>
+			</sequences>
+
+			<auths>
+				<auth>
+					<token>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</token>
+					<userId>1</userId>
+					<exp>2024-01-02T10:00:00</exp>
+					<loggedIn>true</loggedIn>
+				</auth>
+			</auths>
+
+			<users>
+				<user>
+					<id>1</id>
+					<phone>89121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2024-01-01T10:00:00</lastAuth>
+				</user>
+			</users>
+		</resultDatabaseState>
+
+		<command>
+			<contactId>2</contactId>
+		</command>
+		
+		<expectedErrorCode>6</expectedErrorCode>
+	</AddContactFailureTestCase>
+	
+	<AddContactFailureTestCase>
+		<currentTime>2024-01-01T10:00:00</currentTime>
+
+		<operationContext>
+			<authToken>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</authToken>
+		</operationContext>
+
+		<initialDatabaseState>
+			<sequences>
+				<user-id>2</user-id>
+				<message-id>0</message-id>
+			</sequences>
+
+			<auths>
+				<auth>
+					<token>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</token>
+					<userId>1</userId>
+					<exp>2024-01-02T10:00:00</exp>
+					<loggedIn>true</loggedIn>
+				</auth>
+			</auths>
+
+			<users>
+				<user>
+					<id>1</id>
+					<phone>89121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:00:00</lastAuth>
+				</user>
+
+				<user>
+					<id>2</id>
+					<phone>89121111112</phone>
+					<password>Qwerty</password>
+					<username>Манька Красногуб</username>
+					<avatarHref>http://site.xyz/images/manka-krasnogub.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:05:00</lastAuth>
+				</user>
+			</users>
+			
+			<contacts>
+				<contact>
+					<whoseId>1</whoseId>
+					<whoId>2</whoId>
+				</contact>
+			</contacts>
+		</initialDatabaseState>
+
+		<resultDatabaseState>
+			<sequences>
+				<user-id>2</user-id>
+				<message-id>0</message-id>
+			</sequences>
+
+			<auths>
+				<auth>
+					<token>c2721f6afb09e42f33073a905dc5f97fafa4e0f8a0d493e8e8ba653dd5a28655</token>
+					<userId>1</userId>
+					<exp>2024-01-02T10:00:00</exp>
+					<loggedIn>true</loggedIn>
+				</auth>
+			</auths>
+
+			<users>
+				<user>
+					<id>1</id>
+					<phone>89121111111</phone>
+					<password>Qwerty</password>
+					<username>Вася Пупкин</username>
+					<avatarHref>http://site.xyz/images/vasya-pupkin.jpg</avatarHref>
+					<lastAuth>2024-01-01T10:00:00</lastAuth>
+				</user>
+
+				<user>
+					<id>2</id>
+					<phone>89121111112</phone>
+					<password>Qwerty</password>
+					<username>Манька Красногуб</username>
+					<avatarHref>http://site.xyz/images/manka-krasnogub.jpg</avatarHref>
+					<lastAuth>2023-12-31T20:05:00</lastAuth>
+				</user>
+			</users>
+			
+			<contacts>
+				<contact>
+					<whoseId>1</whoseId>
+					<whoId>2</whoId>
+				</contact>
+			</contacts>
+		</resultDatabaseState>
+
+		<command>
+			<contactId>2</contactId>
+		</command>
+		
+		<expectedErrorCode>7</expectedErrorCode>
+	</AddContactFailureTestCase>
+</AddContactTestCases>

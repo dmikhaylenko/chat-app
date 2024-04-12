@@ -1,11 +1,9 @@
 package org.github.dmikhaylenko.modules.users.auth;
 
-import javax.ws.rs.core.HttpHeaders;
+import java.util.Optional;
 
 import org.github.dmikhaylenko.auth.AuthToken;
-import org.github.dmikhaylenko.auth.AuthTokenParser;
 import org.github.dmikhaylenko.dao.Dao;
-import org.github.dmikhaylenko.http.HttpAuthTokenParser;
 import org.github.dmikhaylenko.modules.AuthenticationException;
 
 import lombok.Getter;
@@ -20,10 +18,8 @@ public class AuthTokenModel implements AuthToken {
 		this(null);
 	}
 
-	@Deprecated
-	public static AuthTokenModel getTokenFromHeader(HttpHeaders headers) {
-		AuthTokenParser parser = new HttpAuthTokenParser(headers);
-		return parser.parseTokenValue().map(AuthTokenModel::new).orElseGet(AuthTokenModel::new);
+	public static AuthToken valueOf(Optional<String> tokenValue) {
+		return tokenValue.map(AuthTokenModel::new).orElseGet(AuthTokenModel::new);
 	}
 
 	@Override
@@ -37,7 +33,7 @@ public class AuthTokenModel implements AuthToken {
 	public void logout() {
 		Dao.authDao().executeLogout(getToken());
 	}
-	
+
 	@Override
 	public Long getAuthenticatedUser() {
 		return Dao.authDao().getAuthenticatedUser(getToken());

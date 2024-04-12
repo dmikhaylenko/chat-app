@@ -9,14 +9,24 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class Time {
-	public Instant currentInstant() {
-		return Instant.now();
+	private CurrentTimeProvider currentTimeProvider = Instant::now;
+
+	public void initialize(CurrentTimeProvider currentTimeProvider) {
+		Time.currentTimeProvider = currentTimeProvider;
 	}
 	
+	public void reset() {
+		Time.currentTimeProvider = Instant::now;
+	}
+
+	public Instant currentInstant() {
+		return currentTimeProvider.now();
+	}
+
 	public LocalDateTime currentLocalDateTime() {
 		return createLocalDateTime(currentInstant());
 	}
-	
+
 	public LocalDateTime createLocalDateTime(Instant instant) {
 		return Optional.ofNullable(instant).map(value -> {
 			return LocalDateTime.ofInstant(value, Timezone.getZoneOffset());
@@ -24,8 +34,12 @@ public class Time {
 	}
 
 	public LocalDateTime createLocalDateTime(Timestamp timestamp) {
-		return Optional.ofNullable(timestamp).map(Timestamp::toInstant).map(Time::createLocalDateTime)
+		// @formatter:off
+		return Optional.ofNullable(timestamp)
+				.map(Timestamp::toInstant)
+				.map(Time::createLocalDateTime)
 				.orElse(null);
+		// @formatter:on
 	}
 
 	public Instant createInstant(LocalDateTime localDateTime) {
@@ -41,5 +55,9 @@ public class Time {
 				.map(Timestamp::from)
 				.orElse(null);
 		// @formatter:on
+	}
+
+	public interface CurrentTimeProvider {
+		Instant now();
 	}
 }

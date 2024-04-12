@@ -2,7 +2,7 @@ package org.github.dmikhaylenko.modules.messages.history;
 
 import java.time.LocalDateTime;
 
-import org.github.dmikhaylenko.dao.messages.DBMessageView;
+import org.github.dmikhaylenko.dao.messages.history.DBMessageView;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

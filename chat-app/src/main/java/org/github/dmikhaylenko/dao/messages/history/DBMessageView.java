@@ -1,4 +1,4 @@
-package org.github.dmikhaylenko.dao.messages;
+package org.github.dmikhaylenko.dao.messages.history;
 
 import java.time.LocalDateTime;
 

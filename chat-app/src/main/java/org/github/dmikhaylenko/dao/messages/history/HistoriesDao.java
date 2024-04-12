@@ -3,7 +3,6 @@ package org.github.dmikhaylenko.dao.messages.history;
 import java.util.List;
 
 import org.github.dmikhaylenko.dao.DBPaginate;
-import org.github.dmikhaylenko.dao.messages.DBMessageView;
 
 public interface HistoriesDao {
 

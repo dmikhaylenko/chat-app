@@ -41,7 +41,7 @@ public class Pagination implements DBPaginate {
 		return new Pagination(pageNumber, pageSize.defaults(maxPageSize, defaultPageSize));
 	}
 
-	public Pagination defaultPageNumber(DefaultPageNumberCalculator pageNumberCalculator) {
+	public Pagination calculateDefaultPageNumber(DefaultPageNumberCalculator pageNumberCalculator) {
 		return new Pagination(pageNumber.defaults(pageNumberCalculator.calculatePageNumber(pageNumber, pageSize)),
 				pageSize);
 	}
